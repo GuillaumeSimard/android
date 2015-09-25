@@ -1,0 +1,33 @@
+
+<!--LinearLayout principal de la page -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblNomUtil"
+        android:text="@string/lblNomUtil"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingTop="10dp" />
+
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textSize="25dp"
+        android:text="@string/TextDemandeConducteur"/>
+
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </ListView>
+
+</LinearLayout>

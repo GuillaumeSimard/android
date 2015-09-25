@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">EcoTrajet</string>
+
+    <!--#################################### texte ##############################################-->
+
+    <!--texte ce rapportant à la page de connexion-->
+    <string name="identifientConnexion">Username :</string>
+    <string name="hintUtilisateurNameConnection">Type your username</string>
+    <string name="pswConnection">Password :</string>
+    <string name="hintPswConnection">Type your password</string>
+    <string name="btnConnctionText">Sign in</string>
+    <string name="btnInscriptionText">Sign Up</string>
+
+</resources>

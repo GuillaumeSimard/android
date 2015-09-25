@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="MesDepartsEmprunter">
+        <item>Départ emprunter 1</item>
+        <item>Départ emprunter 2</item>
+        <item>Départ emprunter 3</item>
+        <item>Départ emprunter 4</item>
+        <item>Départ emprunter 5</item>
+        <item>Départ emprunter 6</item>
+        <item>Départ emprunter 7</item>
+        <item>Départ emprunter 8</item>
+        <item>Départ emprunter 9</item>
+    </string-array>
+</resources>

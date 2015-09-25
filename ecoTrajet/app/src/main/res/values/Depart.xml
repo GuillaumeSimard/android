@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="MesDeparts">
+        <item>Départ 1</item>
+        <item>Départ 2</item>
+        <item>Départ 3 </item>
+        <item>Départ 4</item>
+        <item>Départ 5</item>
+        <item>Départ 6</item>
+        <item>Départ 7</item>
+        <item>Départ 8</item>
+        <item>Départ 9</item>
+    </string-array>
+</resources>

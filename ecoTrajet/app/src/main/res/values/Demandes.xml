@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="MesDemandes">
+        <item>Demande 1</item>
+        <item>Demande 2</item>
+        <item>Demande 3 </item>
+        <item>Demande 4</item>
+        <item>Demande 5</item>
+        <item>Demande 6</item>
+        <item>Demande 7</item>
+        <item>Demande 8</item>
+        <item>Demande 9</item>
+    </string-array>
+</resources>

@@ -1,0 +1,196 @@
+<resources>
+    <string name="app_name">EcoTrajet</string>
+
+    <!--#################################### texte ##############################################-->
+
+    <!--texte ce rapportant à la page de connexion-->
+    <string name="identifientConnexion">nom d\'utilisateur</string>
+    <string name="hintUtilisateurNameConnection">entrer votre identifiant</string>
+    <string name="pswConnection">Mot de Passe :</string>
+    <string name="hintPswConnection">entrer votre mot de passe </string>
+    <string name="btnConnctionText">Connexion </string>
+    <string name="btnInscriptionText">Inscription </string>
+
+    <!--Text ce rapportant à la page d'inscription -->
+    <string name="identifiantInscriptionText"> Nom d\'utilisateur :</string>
+    <string name="hintIdentifiantInscriptionText"> ex: chadguy</string>
+    <string name="prenomInscriptionText">prénom :</string>
+    <string name="hintPrenomInscriptionText">ex: Guillaume</string>
+    <string name="nomIscriptionText">nom de famille :</string>
+    <string name="hintNomIscriptionText">ex: Simard</string>
+    <string name="emailInscriptionText">adresse courriel :</string>
+    <string name="hintEmailInscriptionText">ex: guillaume@gmail.com</string>
+    <string name="telephoneInscriptionText">numéro de téléphone :</string>
+    <string name="hintTelephoneInscriptionText">(418) 843-5257</string>
+    <string name="pswInscriptionText">mot de passe :</string>
+    <string name="hintPswInscriptionText">entrer votre mot de passe</string>
+    <string name="pswConfirmeInscriptionText"> confirmation de mot de passe : </string>
+    <string name="hintPswConfirmeInscriptionText"> entrer à nouveau votre mot de passe</string>
+
+
+    <!--Text ce rapportant à la page de choix  -->
+    <string name="btnPassagerText"> Passager</string>
+    <string name="btnConducteurText"> Conducteur</string>
+    <string name="textViewChoix"> Guillaume vous ètes ?</string>
+
+    <!-- texte se rapportant à la page d\'un passager -->
+    <string name="TextPassActivity">Liste des parcours empruntés </string>
+
+    <!-- texte se rapportant au fragment des departs d'un conducteur -->
+    <string name="TextDepartConducteur">Liste de mes départs </string>
+
+    <!-- texte se rapportant au fragment des departs d'un conducteur -->
+    <string name="TextDemandeConducteur">Liste de mes demande </string>
+
+
+    <!-- texte se rapportant au nom des fragment  d'un conducteur -->
+    <string name="textFragmentDepart">Départ</string>
+    <string name="textFragmentDemande">Demande</string>
+
+    <!-- id se rapportant à la page d\'ajout de trajet -->
+    <string name="TextDateDepart">Date du trajet : </string>
+    <string name="TextNbPersonne">nombre de passager disponible : </string>
+    <string name="TextHeureDepart">Heure de départ prévue : </string>
+
+    <!-- Page recherche -->
+    <string name="lblPageRecherche">Rechercher un trajet</string>
+    <string name="lblRecherchePointA">Point de départ :</string>
+    <string name="lblRecherchePointB">Point d\'arrivé :</string>
+    <string name="lblRechercheDateA">Entre :</string>
+    <string name="lblRechercheDateB">Et :</string>
+    <string name="btnChoisirDate">Sélectionnez une date</string>
+    <string name="lblBtnRechercher">Rechercher</string>
+    <string name="title_rechercheActivity">RechercheActivity</string>
+
+    <!-- Page resultat recherche -->
+    <string name="lblResultatRechercheTitre">Resultat de la recherche</string>
+    <string name="title_resultatRechercheActivity">ResultatRechercheActivity</string>
+
+    <!--Page description -->
+    <string name="lblTitreDescParcours">Parcours 1</string>
+    <string name="lblCoordonneesDepart">Coordonnées de départ :</string>
+    <string name="CoordDepartDescParcours">46°48\'44, 71°12\'52</string>
+    <string name="lblCoordonneesArrive">Coordonnées d\'arrivée :</string>
+    <string name="CoordArriveDescParcours">45°30, 73°30</string>
+    <string name="lblConducteurVoitureDescParcours">Conducteur de la voiture :</string>
+    <string name="ConducteurVoitureDescParcours">Guillaume Simard</string>
+    <string name="lblContributionDescParcours">Contribution demandé par passager :</string>
+    <string name="ContributionDescParcours">20$</string>
+    <string name="btnDemanderDescParcours">Demander au conducteur</string>
+    <string name="title_DescriptionParcoursActivity">DescriptionParcoursActivity</string>
+
+    <!--Page Modification d'un parcours -->
+    <string name="text_Title_activity">modification du parcours : Parcours 1</string>
+    <string name="text_modif_nbPassager">4</string>
+    <string name="text_modif_heure">15 h 00</string>
+
+
+    <!--#################################### identifiant ########################################-->
+
+    <!-- id se rapportant à la page de connexion -->
+    <string name="idBtnConnection">btnConnexion </string>
+    <string name="idBtnInscription">btnInsription </string>
+
+    <!-- id se rapportant à la page d\'inscription -->
+    <string name="idIdentifiantInsc">idIdentifiantIns </string>
+    <string name="idPrenomInsc">idPrenomIns </string>
+    <string name="idNomInsc">idNomIns </string>
+    <string name="idEmailInsc">idEmailIns </string>
+    <string name="idTelephoneInsc">idTelephoneIns </string>
+    <string name="idPswInsc">idPswIns </string>
+    <string name="idConfirmPswInsc">idConfirmPswIns </string>
+    <string name="title_activity_inscription_">inscription_Activity</string>
+
+    <!-- id se rapportant à la page de choix -->
+    <string name="idBtnPassager">btnConnexion </string>
+    <string name="idBtnConducteur">btnInsription </string>
+
+    <!-- id se rapportant à la page d\'un passager -->
+    <string name="idTextPassActivity">idTextMain </string>
+
+
+    <!-- id se rapportant à la page d\'ajout de trajet -->
+    <string name="idNbPersonne">idNbPersonne </string>
+    <string name="idHeureDepart">idHeureDepart </string>
+    <string name="idAjoutTrajet">idAjoutTrajet </string>
+    <string name="titrePopopCofirm">confirmation de l\'ajout </string>
+    <string name="textePopoAjout">Voulez-vous vraiment ajouter ce trajet à votre liste ?  </string>
+
+    <!--texte popop confirmation supression departs -->
+    <string name="titrePopopDeleteDepart">confirmation de la suppression </string>
+    <string name="textePopoSupprimer">Voulez-vous vraiment supprimer ce départs  </string>
+
+    <!--texte popop confirmation de la modification d'un departs -->
+    <string name="titrePopopModifDepart">confirmation de la modification </string>
+    <string name="textePopopModifDepart">Voulez-vous vraiment modifier ce depart ? </string>
+
+    <!--texte popop confirmation de la modification d'un departs -->
+    <string name="titrePopopDeleteDemande">Voulez-vous vraiment modifier cette demande ? </string>
+
+    <!--texte popop confirmation de l'inscription -->
+    <string name="titrePopopInscription">confirmation de l\'inscription </string>
+    <string name="textePopopInscription">Voulez-vous vraiment vpus inscrire ? </string>
+
+    <!--id pour les boutons de la page Recherche d'un trajet -->
+    <string name="idCalendrier">idCalendrier </string>
+
+    <!--id pour les boutons de la page Recherche d'un trajet -->
+    <string name="idRow_depart_nb_place">idRow </string>
+
+    <!--#################################### Menu ###############################################-->
+
+    <!-- main -->
+    <string name="action_settings">setting </string>
+
+    <!-- inscription -->
+    <!-- id -->
+    <string name="idInscMenu">InscripMenu </string>
+    <string name="inscription_menu_accept">Accept</string>
+    <string name="inscription_menu_text">Accepter</string>
+    <string name="title_activity_chose">ChoseActivity</string>
+
+    <!-- conducteur -->
+    <!-- id, texte -->
+    <string name="idAjoutDepart">idAjoutDepart</string>
+    <string name="idVoirCarte">idVoirCarte</string>
+    <string name="idDeconnetion">ChoseActivity</string>
+    <string name="TextAjoutDepart">Ajout de Parcour</string>
+    <string name="TextVoirCarte">Voir la carte</string>
+    <string name="TextDeconnetion">Déconnection</string>
+
+    <!-- Ajout_parcour -->
+    <string name="idAjoutTrajetM">idAjoutTrajetM</string>
+
+    <string name="title_activity_passager">PassagerActivity</string>
+    <string name="title_activity_conducteur">ConducteurActivity</string>
+    <string name="title_activity_map_activity">Map</string>
+    <string name="title_activity_ajout_trajet">ajout_trajet</string>
+
+    <!--menu contextuelle pour le fragment depart-->
+    <!-- texte, id -->
+    <string name="idModifDepart">idModifDepart</string>
+    <string name="idDeleteDepart">idDeleteDeparts</string>
+    <string name="TextModifDepart">modification</string>
+    <string name="texteDeleteDepart">Supprimer</string>
+
+
+    <!--menu contextuelle pour le fragment demandes-->
+    <!-- texte, id -->
+    <string name="idDeleteDemande">idModifDepart</string>
+
+    <!-- Page historique -->
+    <string name="lblNomUtil">Guillaume Simard</string>
+    <string name="lblParcoursEmprunte">Liste des parcours emprunté :</string>
+    <string name="historique_menu_text">Rechercher</string>
+    <string name="title_historiqueActivity">HistoriqueActivity</string>
+
+
+
+
+
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="google_maps_key"> </string>
+    <string name="title_activity_modif_pracour">modifPracourActivity</string>
+</resources>

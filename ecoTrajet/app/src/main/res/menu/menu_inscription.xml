@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.dinfogarneau.cours03e.ecotrajet.InscriptionActivity">
+
+    <item
+        android:id="@+id/idInscMenu"
+        android:title="@string/inscription_menu_text"
+        android:icon="@mipmap/ic_action_accept"
+        android:orderInCategory="100"
+        android:showAsAction="always" />
+</menu>

@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.dinfogarneau.cours03e.ecotrajet.ajout_trajet">
+
+    <item
+        android:id="@+id/idAjoutTrajetM"
+        android:title="@string/inscription_menu_accept"
+        android:icon="@mipmap/ic_action_accept"
+        android:orderInCategory="100"
+        android:showAsAction="always" />
+</menu>

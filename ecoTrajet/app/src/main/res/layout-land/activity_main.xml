@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <ImageView
+        android:layout_width="127dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ecotrajet"
+        android:layout_marginTop="20px"
+        android:paddingTop="50px"
+        android:paddingBottom="100px"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.63" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/identifientConnexion"/>
+
+    <EditText
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintUtilisateurNameConnection"
+        android:id="@+id/txtConnexionSurnom"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/pswConnection"/>
+
+    <EditText
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintPswConnection"
+        android:id="@+id/txtConnexionMotDePasse"
+        android:inputType="textPassword"/>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+    <Button
+        android:id="@+id/idBtnInscription"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="@string/btnInscriptionText"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onClickInscription"/>
+
+
+    <Button
+        android:id="@+id/idBtnConnection"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="@string/btnConnctionText"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onClickConnexion"/>
+        </LinearLayout>
+</LinearLayout>

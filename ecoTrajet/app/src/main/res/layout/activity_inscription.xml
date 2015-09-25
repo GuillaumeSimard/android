@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/identifiantInscriptionText"/>
+
+    <EditText
+        android:id="@+id/idIdentifiantInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintIdentifiantInscriptionText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/prenomInscriptionText"/>
+
+    <EditText
+        android:id="@+id/idPrenomInscInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintPrenomInscriptionText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/nomIscriptionText"/>
+
+    <EditText
+        android:id="@+id/idNomInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintNomIscriptionText"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/emailInscriptionText"/>
+
+    <EditText
+        android:id="@+id/idEmailInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintEmailInscriptionText"
+        android:inputType="textEmailAddress"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/telephoneInscriptionText"/>
+
+    <EditText
+        android:id="@+id/idTelephoneInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintTelephoneInscriptionText"
+        android:inputType="phone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/pswInscriptionText"/>
+
+    <EditText
+        android:id="@+id/idPswInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintPswConnection"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textSize="20sp"
+        android:text="@string/pswConfirmeInscriptionText"/>
+
+    <EditText
+        android:id="@+id/idConfirmPswInsc"
+        android:layout_marginLeft="55dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="120dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="start"
+        android:hint="@string/hintPswConfirmeInscriptionText"
+        android:inputType="textPassword"/>
+    </LinearLayout>
+</ScrollView>

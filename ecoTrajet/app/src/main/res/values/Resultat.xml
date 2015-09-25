@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Resultat">
+    <item>Résultat 1</item>
+    <item>Résultat 2</item>
+    <item>Résultat 3</item>
+    <item>Résultat 4</item>
+    <item>Résultat 5</item>
+    <item>Résultat 6</item>
+    <item>Résultat 7</item>
+    <item>Résultat 8</item>
+    <item>Résultat 9</item>
+    </string-array>
+</resources>

@@ -9,9 +9,9 @@
         android:layout_width="127dp"
         android:layout_height="wrap_content"
         android:src="@mipmap/ecotrajet"
-        android:layout_marginTop="20px"
-        android:paddingTop="50px"
-        android:paddingBottom="100px"
+        android:layout_marginTop="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.63" />
 

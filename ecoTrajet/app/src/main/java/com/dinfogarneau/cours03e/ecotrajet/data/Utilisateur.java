@@ -30,6 +30,7 @@ public class Utilisateur implements Serializable {
         this.m_idTypePassager = -1;
     }
 
+    //constructeur paramètré de la classe utilisateur
     public Utilisateur(String nomUtil, String prenom, String nom, String noTel,
                        String courriel, String motPasse, int idType){
         this.m_nomUtilisateur = nomUtil;

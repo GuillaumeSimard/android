@@ -3,16 +3,26 @@ package com.dinfogarneau.cours03e.ecotrajet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcourPassagerDataSource;
+import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcoursDataSource;
+import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
+import com.dinfogarneau.cours03e.ecotrajet.data.ParcoursUtil;
+import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -21,7 +31,12 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 import static com.google.android.gms.common.api.GoogleApiClient.*;
 
@@ -30,7 +45,6 @@ public class ajout_trajet extends FragmentActivity implements
         ConnectionCallbacks,
         OnConnectionFailedListener,
         LocationListener,
-        GoogleMap.OnMapClickListener,
         GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -38,14 +52,44 @@ public class ajout_trajet extends FragmentActivity implements
     // Objet servant à spécifier la qualité désirée de la localisation.
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
+    private Parcours parcoursAdd;
+    private Spinner spinerRegion;
+    private ParcoursDataSource parcoursDb;
+    private ParcourPassagerDataSource parcoursPassagerDb;
+    private Utilisateur utilisateurRecup;
+    private double lattitueDepart = 0;
+    private double longitudeDepart = 0;
+    private double lattitueArrive = 0;
+    private double longitudeArrive = 0;
+
+    EditText editNom;
+    EditText nbPlace;
+    EditText cout;
+    EditText heure;
+    String Date;
+    ParcoursUtil parcoursUtilAdd;
+
+    String[] strCoordoDepart = new String[2];
+    String[] strCoordoArive = new String[2];
+
+    public static final String UTILISATEURCONNECTE = "Utilisateur connecté";
+
+    Marker markerDebut;
+    Marker markerFin;
 
     // Dernière position obtenue.
     private Location mLastLocation = null;
+    private final String TAG = getClass().getSimpleName();
 
     // Coordonnées initiales : Haute-ville de Québec.
     private final static LatLng QUEBEC_HAUTE_VILLE = new LatLng(46.813395, -71.215954);
     private boolean positionDetecte = false;
     private Dialog dialogConfirmation;
+    public String coordoneeDebut = null;
+    public String coordoneeDeArriver = null;
+    int compteurClick = 1;
+
+    TextView nom;
 
     //variable de gestion du calendrier
     CalendarView calendar;
@@ -55,15 +99,136 @@ public class ajout_trajet extends FragmentActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ajout_trajet);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        editNom = (EditText) findViewById(R.id.idNomParcours);
+        nbPlace = (EditText) findViewById(R.id.idNbPersonne);
+        cout = (EditText) findViewById(R.id.idCoutPersonne);
+        heure = (EditText) findViewById(R.id.idHeureDepart);
+
+
+
+        parcoursDb = new ParcoursDataSource(this);
+        parcoursPassagerDb = new ParcourPassagerDataSource((this));
+
         setUpMapIfNeeded();
         buildGoogleApiClient();
         createLocationRequest();
         initializeCalendar();
+
+        final Intent intent = getIntent();
+        Intent intentrecu = this.getIntent();
+        Bundle extra = intentrecu.getExtras();
+        this.utilisateurRecup = (Utilisateur) extra.getSerializable(InscriptionActivity.UTILISATEURCONNECTE);
+
+        //remplissage du spinner avec les éléments de la bd.
+        spinerRegion = (Spinner) findViewById(R.id.spinner_egion_id);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        parcoursDb.open();
+        ArrayList<String> lstRegion = new ArrayList<String>();
+        lstRegion = parcoursDb.getAllRegion();
+
+        for(int i = 0; i <= lstRegion.size() -1 ;i++ )
+        {
+            adapter.add(lstRegion.get(i));
+        }
+        spinerRegion.setAdapter(adapter);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            public void onMapClick(LatLng latLng) {
+
+                if (compteurClick <= 2) {
+                    if (compteurClick == 1) {
+                        parcoursAdd = new Parcours();
+                        coordoneeDebut = String.valueOf(latLng.latitude) + ";" + String.valueOf(latLng.longitude);
+                        parcoursAdd.setM_coordonneDeparts(coordoneeDebut);
+
+                        markerDebut = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(latLng.latitude,latLng.longitude))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parcour_debut)));
+                        compteurClick++;
+                    } else {
+                        coordoneeDeArriver = String.valueOf(latLng.latitude) + ";" + String.valueOf(latLng.longitude);
+                        parcoursAdd.setM_coordonneArrive(coordoneeDeArriver);
+
+                        markerFin = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(latLng.latitude,latLng.longitude))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parcour_fin)));
+                        compteurClick++;
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle p_OutState) {
+        super.onSaveInstanceState(p_OutState);
+
+        if(coordoneeDebut != null)
+        {
+            p_OutState.putString("coordonneDepart",coordoneeDebut);
+        }
+
+        if(coordoneeDeArriver != null)
+        {
+            p_OutState.putString("coordonneArrivee",coordoneeDeArriver);
+        }
+
+        if(this.parcoursAdd != null){
+            p_OutState.putSerializable("parcours", this.parcoursAdd);
+        }
+        Log.i(TAG, "onSaveInstanceState()");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle p_SavedInstanceState) {
+        super.onRestoreInstanceState(p_SavedInstanceState);
+        if (p_SavedInstanceState != null) {
+
+            boolean reinitialiserRecup = p_SavedInstanceState.getBoolean("estReinitialiser");
+
+            Parcours parcourR;
+            String coordoDepartRecup = p_SavedInstanceState.getString("coordonneDepart");
+            String coordoArriveRecup = p_SavedInstanceState.getString("coordonneArrivee");
+            parcourR = (Parcours) p_SavedInstanceState.getSerializable("parcours");
+
+            if(coordoDepartRecup != null){
+                coordoneeDebut = coordoDepartRecup;
+            }
+
+            if(coordoArriveRecup != null){
+                coordoneeDeArriver = coordoArriveRecup;
+            }
+
+            if(parcourR != null){
+                this.parcoursAdd = parcourR;
+            }
+
+            if( coordoneeDebut != null &&  coordoneeDeArriver != null){
+                mMap.clear();
+                strCoordoDepart = coordoneeDebut.split(";");
+                strCoordoArive = coordoneeDeArriver.split(";");
+
+                for (int i = 0; i <= 1; i++) {
+
+                    if (i == 0) {
+                        lattitueDepart = Double.parseDouble(strCoordoDepart[i]);
+                        lattitueArrive = Double.parseDouble(strCoordoArive[i]);
+                    } else {
+                        longitudeDepart = Double.parseDouble(strCoordoDepart[i]);
+                        longitudeArrive = Double.parseDouble(strCoordoArive[i]);
+                    }
+                }
+                setUpMap();
+                UpdateParcoursMap();
+            }
+        }
+        Log.i(TAG, "onRestoreInstanceState()");
     }
 
     @Override
@@ -119,6 +284,17 @@ public class ajout_trajet extends FragmentActivity implements
     }
 
 
+    private void UpdateParcoursMap() {
+
+                //initialisation des markers
+                markerDebut = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lattitueDepart, longitudeDepart))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.parcour_debut)));
+
+                markerFin = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lattitueArrive, longitudeArrive))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.parcour_fin)));
+    }
 
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
@@ -249,11 +425,6 @@ public class ajout_trajet extends FragmentActivity implements
 
 
     @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-
-    @Override
     public void onMapLongClick(LatLng latLng) {
 
     }
@@ -268,11 +439,60 @@ public class ajout_trajet extends FragmentActivity implements
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
-                        //méthode permettant la suppression
+                        //méthode permettant l'ajout
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            int iNombre;
+                            if(parcoursAdd != null) {
+                                iNombre =  parcoursDb.LstId();
 
-                        }
+                                parcoursAdd.setM_nomParcour(editNom.getText().toString());
+                                parcoursAdd.setM_idRegion(spinerRegion.getSelectedItemPosition() + 1);
+                                parcoursAdd.setM_dateParcours(Date);
+                                parcoursAdd.setM_Heure(heure.getText().toString());
+
+                                if(!nbPlace.getText().toString().equals("")) {
+                                    parcoursAdd.setM_nbPlaceDisponible(Integer.parseInt(nbPlace.getText().toString()));
+                                }
+
+                                parcoursAdd.setM_nbPlacePrise(0);
+
+                                if(!cout.getText().toString().equals("")) {
+                                    parcoursAdd.setM_coutPersonne(Integer.parseInt(cout.getText().toString()));
+                                }
+                                parcoursAdd.setM_idParcour(iNombre + 1);
+
+                                    if(Date != null)
+                                    {
+
+                                        if(!editNom.getText().toString().equals("") && !nbPlace.getText().toString().equals("")
+                                            && !cout.getText().toString().equals("") && !heure.getText().toString().equals("")) {
+
+                                            parcoursUtilAdd = new ParcoursUtil(parcoursAdd.getM_idParcour(), utilisateurRecup.getM_nomUtilisateur());
+                                            parcoursDb.insert(parcoursAdd);
+                                            parcoursPassagerDb.open();
+                                            parcoursPassagerDb.insert((parcoursUtilAdd));
+                                            parcoursPassagerDb.close();
+
+                                            Intent i = new Intent(getApplicationContext(),ConducteurActivity.class);
+                                            i.putExtra(UTILISATEURCONNECTE, utilisateurRecup);
+                                            startActivity(i);
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(), "Tous les champs doivent être remplis pour pouvoir ajouter", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(), "vous devez choisir une date sur le calendrier afin de pouvoir ajouter", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "vous devez entrer des coordonnées sur la carte pour ajouter un parcours", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                     })
                     .create();
             dialogConfirmation.setOwnerActivity(this);
@@ -290,15 +510,19 @@ public class ajout_trajet extends FragmentActivity implements
         calendar = (CalendarView)findViewById(R.id.calendar);
         calendar.setShowWeekNumber(false);
         calendar.setFirstDayOfWeek(2);
-        calendar.setSelectedWeekBackgroundColor(getResources().getColor(R.color.green));
-        calendar.setUnfocusedMonthDateColor(getResources().getColor(R.color.transparent));
-        calendar.setWeekSeparatorLineColor(getResources().getColor(R.color.transparent));
-        calendar.setSelectedDateVerticalBar(R.color.darkgreen);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
 
+                if(month < 10)
+                {
+                    Date = String.valueOf(day) + "/" + "0"+ String.valueOf(month+1) + "/" + String.valueOf(year);
+                }
+                else
+                {
+                    Date = String.valueOf(day) + "/" + String.valueOf(month+1) + "/" + String.valueOf(year);
+                }
                 Toast.makeText(getApplicationContext(), day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
             }
 

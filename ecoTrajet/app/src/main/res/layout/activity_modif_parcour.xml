@@ -1,22 +1,61 @@
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_weight="1" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.dinfogarneau.cours03e.ecotrajet.ajout_trajet">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/idTextEnteteModif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"/>
+
+        <fragment  xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            tools:context=".ajout_trajet"
+            tools:layout="@layout/activity_ajout_trajet" />
+
+    <Button
+        android:id="@+id/idResetidResetCoord"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:text="@string/texrRestCoordo"
+        android:onClick="OnClickDeleteMarker"/>
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="100px"
-            android:paddingTop="10px"
-            android:textSize="30sp"
-            android:text="@string/text_Title_activity"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            android:text="@string/textNomParcours"/>
+
+        <EditText
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="120dp"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ellipsize="start"
+            android:id="@+id/idNomParcoursModif"
+            android:inputType="text"/>
 
 
         <LinearLayout
@@ -25,18 +64,16 @@
             android:orientation="horizontal">
 
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="55dp"
+                android:layout_marginLeft="5dp"
                 android:textSize="20sp"
                 android:text="@string/TextDateDepart"/>
 
             <CalendarView
                 android:id="@+id/calendar"
                 android:layout_margin="10dp"
-                android:paddingBottom="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
 
@@ -50,20 +87,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="55dp"
+                android:layout_marginLeft="5dp"
                 android:textSize="20sp"
                 android:text="@string/TextNbPersonne"/>
             <EditText
-
-                android:layout_marginLeft="55dp"
                 android:layout_marginBottom="30dp"
                 android:layout_marginRight="120dp"
                 android:layout_centerVertical="true"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ellipsize="start"
-                android:id="@+id/idNbPersonne"
-                android:text="@string/text_modif_nbPassager"
+                android:id="@+id/idNbPlaceModif"
                 android:inputType="text"/>
 
         </LinearLayout>
@@ -76,23 +110,66 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="55dp"
+                android:layout_marginLeft="5dp"
                 android:textSize="20sp"
                 android:text="@string/TextHeureDepart"/>
             <EditText
-
-                android:layout_marginLeft="55dp"
                 android:layout_marginBottom="30dp"
                 android:layout_marginRight="120dp"
                 android:layout_centerVertical="true"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ellipsize="start"
-                android:id="@+id/idHeureDepart"
-                android:text="@string/text_modif_heure"
+                android:id="@+id/idHeureModif"
+                android:inputType="text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="20sp"
+                android:text="@string/textCout"/>
+
+            <EditText
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="120dp"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ellipsize="start"
+                android:id="@+id/idCoutPersonneModif"
                 android:inputType="text"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="20sp"
+                android:text="@string/textSpinnerRegion"/>
 
-    </LinearLayout>
-</ScrollView>
+            <Spinner
+                android:id="@+id/idSpinnerRegionModif"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="120dp"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ellipsize="start"
+                android:hint="@string/hintPswConfirmeInscriptionText"
+                android:inputType="textPassword"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

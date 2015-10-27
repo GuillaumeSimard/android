@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
+
 /**
  * Created by Remy Huot on 2015-09-18.
  */
@@ -17,11 +19,17 @@ public class HistoriqueActivity extends ListActivity {
 
     //déclaration des variables
     private String[] lstDepartPassager;
+    private Utilisateur utilisateurRecup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historique);
         lstDepartPassager = getResources().getStringArray(R.array.MesDepartsEmprunter);
+
+        Intent intentrecu = this.getIntent();
+        Bundle extra = intentrecu.getExtras();
+        this.utilisateurRecup = (Utilisateur) extra.getSerializable(InscriptionActivity.UTILISATEURCONNECTE);
         this.setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lstDepartPassager));
     }
 

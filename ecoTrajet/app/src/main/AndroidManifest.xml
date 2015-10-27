@@ -36,37 +36,13 @@
                 android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
         </activity>
         <activity
-            android:name=".ChoseActivity"
-            android:label="@string/title_activity_chose"
-            android:parentActivityName=".InscriptionActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
-        </activity>
-        <activity
-            android:name=".PassagerActivity"
-            android:label="@string/title_activity_passager"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
-        </activity>
-        <activity
             android:name=".ConducteurActivity"
-            android:label="@string/title_activity_conducteur"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
+            android:label="@string/title_activity_conducteur">
         </activity>
         <activity
             android:name=".HistoriqueActivity"
             android:label="@string/title_historiqueActivity"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
-        </activity>
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".RechercheActivity"
             android:label="@string/title_rechercheActivity"
@@ -85,12 +61,7 @@
         </activity>
         <activity
             android:name=".DescriptionParcoursActivity"
-            android:label="@string/title_DescriptionParcoursActivity"
-            android:parentActivityName=".HistoriqueActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.HistoriqueActivity" />
-        </activity>
+            android:label="@string/title_DescriptionParcoursActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

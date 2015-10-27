@@ -26,6 +26,7 @@
     <string name="hintPswInscriptionText">entrer votre mot de passe</string>
     <string name="pswConfirmeInscriptionText"> confirmation de mot de passe : </string>
     <string name="hintPswConfirmeInscriptionText"> entrer à nouveau votre mot de passe</string>
+    <string name="nomTypePasager"> Conducteur ou passager :</string>
 
 
     <!--Text ce rapportant à la page de choix  -->
@@ -51,6 +52,11 @@
     <string name="TextDateDepart">Date du trajet : </string>
     <string name="TextNbPersonne">nombre de passager disponible : </string>
     <string name="TextHeureDepart">Heure de départ prévue : </string>
+    <string name="textNomParcours">NomParcours : </string>
+    <string name="textCout">Cout par personne : </string>
+    <string name="hintNomParcours"> parcours Québec -Montréal  </string>
+    <string name="hintCoutPersonne"> 15  </string>
+    <string name="textSpinnerRegion">région Administrative ?  </string>
 
     <!-- Page recherche -->
     <string name="lblPageRecherche">Rechercher un trajet</string>
@@ -79,6 +85,8 @@
     <string name="btnDemanderDescParcours">Demander au conducteur</string>
     <string name="title_DescriptionParcoursActivity">DescriptionParcoursActivity</string>
 
+
+
     <!--Page Modification d'un parcours -->
     <string name="text_Title_activity">modification du parcours : Parcours 1</string>
     <string name="text_modif_nbPassager">4</string>
@@ -87,9 +95,25 @@
 
     <!--#################################### identifiant ########################################-->
 
+
+
+    <!-- id page description -->
+    <string name="idNomDesc">idNomDesc</string>
+    <string name="idDateDes">idDateDes</string>
+    <string name="idNbPesonneDes">idNbPesonneDes</string>
+    <string name="idHeureDes">idHeureDes</string>
+    <string name="idCoutPersonneDes">idCoutPersonneDes </string>
+    <string name="idNomConducteurDes">idNomConducteurDes</string>
+    <string name="idRegionDes">idRegionDes</string>
+    <string name="textNomConducteur">nom du conducteur :</string>
+
+
+    <string name="idLenearLayout">idLenearLayout </string>
+
     <!-- id se rapportant à la page de connexion -->
     <string name="idBtnConnection">btnConnexion </string>
     <string name="idBtnInscription">btnInsription </string>
+    <string name="idMessageErreur">idEreurLogin </string>
 
     <!-- id se rapportant à la page d\'inscription -->
     <string name="idIdentifiantInsc">idIdentifiantIns </string>
@@ -100,6 +124,7 @@
     <string name="idPswInsc">idPswIns </string>
     <string name="idConfirmPswInsc">idConfirmPswIns </string>
     <string name="title_activity_inscription_">inscription_Activity</string>
+    <string name="spinner_typeUtilisateur_id">spinner_typeUtilisateur_id</string>
 
     <!-- id se rapportant à la page de choix -->
     <string name="idBtnPassager">btnConnexion </string>
@@ -113,8 +138,11 @@
     <string name="idNbPersonne">idNbPersonne </string>
     <string name="idHeureDepart">idHeureDepart </string>
     <string name="idAjoutTrajet">idAjoutTrajet </string>
+    <string name="idNomParcours">idAjoutTrajet </string>
     <string name="titrePopopCofirm">confirmation de l\'ajout </string>
     <string name="textePopoAjout">Voulez-vous vraiment ajouter ce trajet à votre liste ?  </string>
+    <string name="spinner_egion_id">idRegionS</string>
+    <string name="idCoutPersonne">idCoutPersonne</string>
 
     <!--texte popop confirmation supression departs -->
     <string name="titrePopopDeleteDepart">confirmation de la suppression </string>
@@ -123,9 +151,19 @@
     <!--texte popop confirmation de la modification d'un departs -->
     <string name="titrePopopModifDepart">confirmation de la modification </string>
     <string name="textePopopModifDepart">Voulez-vous vraiment modifier ce depart ? </string>
+    <string name="idTextEnteteModif">idTextEnteteModif</string>
+    <string name="idNomParcoursModif">idNomParcoursModif</string>
+    <string name="idNbPlaceModif">idNbPlaceModif</string>
+    <string name="idHeureModif">idHeureModif</string>
+    <string name="idCoutPersonneModif">idCoutPersonneModif</string>
+    <string name="idSpinnerRegionModif">idSpinnerRegionModif</string>
+
+
 
     <!--texte popop confirmation de la modification d'un departs -->
     <string name="titrePopopDeleteDemande">Voulez-vous vraiment modifier cette demande ? </string>
+    <string name="idResetidResetCoord">idResetidResetCoord</string>
+    <string name="texrRestCoordo"> réinitialisation des points de départs et d\'arriver</string>
 
     <!--texte popop confirmation de l'inscription -->
     <string name="titrePopopInscription">confirmation de l\'inscription </string>

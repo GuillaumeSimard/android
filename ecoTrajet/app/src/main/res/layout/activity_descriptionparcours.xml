@@ -1,104 +1,217 @@
-<?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    tools:context="com.dinfogarneau.cours03e.ecotrajet.ajout_trajet">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/lblTitreDescParcours"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:paddingTop="10dp"
-        android:id="@+id/lblTitreDescParcours"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lblCoordDepartDescParcours"
-        android:text="@string/lblCoordonneesDepart"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:textStyle="bold"
-        />
+    <fragment  xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        tools:context=".ajout_trajet"
+        tools:layout="@layout/activity_ajout_trajet" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/CoordDepartDescParcours"
-        android:text="@string/CoordDepartDescParcours"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="8dp" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lblCoordArriveDescParcours"
-        android:text="@string/lblCoordonneesArrive"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:textStyle="bold"
-        />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/CoordArriveDescParcours"
-        android:text="@string/CoordArriveDescParcours"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="55dp"
+                android:textSize="20sp"
+                android:text="@string/textNomParcours"/>
 
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/lblConducteurVoitureDescParcours"
-    android:text="@string/lblConducteurVoitureDescParcours"
-    android:layout_marginTop="20dp"
-    android:layout_marginLeft="20dp"
-    android:textStyle="bold"
-    />
+            <TextView
+                android:layout_marginLeft="55dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="120dp"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ellipsize="start"
+                android:id="@+id/idNomDesc"
+                android:inputType="text"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ConducteurVoitureDescParcours"
-        android:text="@string/ConducteurVoitureDescParcours"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="8dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lblContributionDescParcours"
-        android:text="@string/lblContributionDescParcours"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:textStyle="bold"
-        />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ContributionDescParcours"
-        android:text="@string/ContributionDescParcours"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="8dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="bottom|center">
-        <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnDemanderDescParcours"
-        android:text="@string/btnDemanderDescParcours"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:layout_marginBottom="20dp"
-            android:onClick="onClickDemander"/>
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:textSize="20sp"
+                    android:text="@string/TextDateDepart"/>
+
+                <TextView
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ellipsize="start"
+                    android:id="@+id/idDateDes"
+                    android:inputType="text"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:textSize="20sp"
+                    android:text="@string/TextNbPersonne"/>
+                <TextView
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ellipsize="start"
+                    android:id="@+id/idNbPesonneDes"
+                    android:inputType="text"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:textSize="20sp"
+                    android:text="@string/TextHeureDepart"/>
+                <TextView
+
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ellipsize="start"
+                    android:id="@+id/idHeureDes"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:textSize="20sp"
+                    android:text="@string/textCout"/>
+
+                <TextView
+
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ellipsize="start"
+                    android:id="@+id/idCoutPersonneDes"
+                    android:inputType="text"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:textSize="20sp"
+                    android:text="@string/textNomConducteur"/>
+
+                <TextView
+
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ellipsize="start"
+                    android:id="@+id/idNomConducteurDes"
+                    android:inputType="text"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:textSize="20sp"
+                    android:text="@string/textSpinnerRegion"/>
+
+                <TextView
+                    android:id="@+id/idRegionDes"
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ellipsize="start"
+                    android:inputType="text"/>
+
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/idLenearLayout"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="bottom|center">
+                    <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnDemanderDescParcours"
+                    android:text="@string/btnDemanderDescParcours"
+                    android:paddingLeft="50dp"
+                    android:paddingRight="50dp"
+                    android:layout_marginBottom="20dp"
+                        android:onClick="onClickDemander"/>
+                </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

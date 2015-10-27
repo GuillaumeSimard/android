@@ -10,6 +10,7 @@ import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
 import com.dinfogarneau.cours03e.ecotrajet.sqlHelper.sqlDataSource;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Created by Guillaume on 2015-10-09.
@@ -21,8 +22,8 @@ public class UtilisateurDataSource {
     // Constantes pour le noms des champs de la table Utilisateur.
     private static final String COL_NOM_UTIL = "_nomUtilisateur";
     private static final String COL_PRENOM = "prenom";
-        private static final String COL_NOM = "nom";
-        private static final String COL_TELEPHONE = "noTelephone";
+    private static final String COL_NOM = "nom";
+    private static final String COL_TELEPHONE = "noTelephone";
     private static final String COL_COURRIEL = "email";
     private static final String COL_MOTPASSE = "motDePasse";
     private static final String COL_TYPEUTILISATEUR = "idTypePassager";
@@ -100,17 +101,40 @@ public class UtilisateurDataSource {
     }
 
     /**
-     * Mise à jour d'un objet Parcours dans la BD.
-     */
-    public void update(Utilisateur util) {
-        ContentValues row = faireLigne(util);
-        m_Db.update(TABLE_NAME_UTILISATEUR, row,COL_NOM_UTIL  + "=" + util.getM_nomUtilisateur(), null);
-    }
-
-    /**
      * Destruction d'un objet Parcours dans la BD.
      */
     public void delete(String nomUtil) {
         m_Db.delete(TABLE_NAME_UTILISATEUR, COL_NOM_UTIL + "=" + nomUtil, null);
     }
+
+    public ArrayList<String> getAllType()
+    {
+        ArrayList<String> lstType = new ArrayList<String>();
+
+        Cursor c = m_Db.rawQuery("SELECT nomType FROM TypeUtilisateur", null);
+        c.moveToFirst();
+        while(!c.isAfterLast())
+        {
+            lstType.add(c.getString(c.getColumnIndex("nomType")));
+            c.moveToNext();
+        }
+        return lstType;
+    }
+    /**
+     * Méthode permettant de vérifier l'utilisateur lors de la connexion
+     * @param nomUtil
+     * @param motPasse
+     * @return
+     */
+    public Utilisateur connexionUtil(String nomUtil, String motPasse) {
+        Utilisateur utilConnect = null;
+        Cursor c = m_Db.rawQuery("SELECT _nomUtilisateur, prenom,nom, noTelephone, email, motDePasse, idTypePassager FROM Utilisateurs WHERE  _nomUtilisateur =  '"+ nomUtil + "' AND motDePasse = '" + motPasse + "'", null);
+        if(c.getCount() > 0){
+            c.moveToFirst();
+            utilConnect = lireLigneSite(c);
+        }
+        return utilConnect;
+    }
+
+
 }

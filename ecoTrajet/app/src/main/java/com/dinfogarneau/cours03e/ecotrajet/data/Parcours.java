@@ -2,6 +2,7 @@ package com.dinfogarneau.cours03e.ecotrajet.data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Guillaume on 2015-10-02.
@@ -17,37 +18,39 @@ public class Parcours implements Serializable {
     private int m_idParcour;
     private String m_nomParcour;
     private int m_nbPlaceDisponible;
+    private int m_nbPlacePrise;
     private String m_dateParcours;
+    private String m_Heure;
     private double m_coutPersonne;
     private int m_idRegion;
     private String m_coordonneDeparts;
     private String m_coordonneArrive;
-    private String m_nomConducteur;
 
     public Parcours()
     {
         this.m_idParcour = -1;
         this.m_nomParcour = "";
         this.m_nbPlaceDisponible = -1;
+        this.m_nbPlacePrise = -1;
         this.m_dateParcours = "";
         this.m_coutPersonne = -1;
         this.m_idRegion = -1;
         this.m_coordonneDeparts = "";
         this.m_coordonneArrive = "";
-        this.m_nomConducteur = "";
     }
 
-    public Parcours(int id, String nom, int nbPlace, String date, double cout,
-                    int idRegion,String depart, String arrive, String nomConducteur ){
+    public Parcours(int id, String nom, int nbPlace,int nbPlacePrice, String date,String heure, double cout,
+                    int idRegion,String depart, String arrive ){
         this.m_idParcour = id;
         this.m_nomParcour = nom;
         this.m_nbPlaceDisponible = nbPlace;
+        this.m_nbPlacePrise = nbPlacePrice;
         this.m_dateParcours = date;
+        this.m_Heure = heure;
         this.m_coutPersonne = cout;
         this.m_idRegion = idRegion;
         this.m_coordonneDeparts = depart;
         this.m_coordonneArrive = arrive;
-        this.m_nomConducteur = nomConducteur;
     }
 
 
@@ -115,11 +118,20 @@ public class Parcours implements Serializable {
         this.m_coordonneArrive = m_coordonneArrive;
     }
 
-    public String getM_nomConducteur() {
-        return m_nomConducteur;
+
+    public int getM_nbPlacePrise() {
+        return m_nbPlacePrise;
     }
 
-    public void setM_nomConducteur(String m_nomConducteur) {
-        this.m_nomConducteur = m_nomConducteur;
+    public void setM_nbPlacePrise(int m_nbPlacePrise) {
+        this.m_nbPlacePrise = m_nbPlacePrise;
+    }
+
+    public String getM_Heure() {
+        return m_Heure;
+    }
+
+    public void setM_Heure(String m_Heure) {
+        this.m_Heure = m_Heure;
     }
 }

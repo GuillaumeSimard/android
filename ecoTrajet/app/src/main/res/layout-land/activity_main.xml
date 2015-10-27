@@ -60,6 +60,7 @@
         android:orientation="horizontal"
         android:gravity="center">
 
+
     <Button
         android:id="@+id/idBtnInscription"
         android:layout_width="wrap_content"
@@ -78,5 +79,13 @@
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:onClick="onClickConnexion"/>
+
+        <TextView
+            android:id="@+id/idMessageErreur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="55dp"
+            android:textColor="@color/red"
+            android:textSize="20sp"/>
         </LinearLayout>
 </LinearLayout>

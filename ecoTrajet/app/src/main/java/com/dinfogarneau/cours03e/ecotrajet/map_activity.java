@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcoursDataSource;
+import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
+import com.dinfogarneau.cours03e.ecotrajet.fragment.DepartFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -15,7 +18,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import java.util.ArrayList;
 
 
 public class map_activity extends FragmentActivity implements
@@ -23,18 +30,25 @@ public class map_activity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapLongClickListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     // Objet servant à spécifier la qualité désirée de la localisation.
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
+    private ParcoursDataSource m_Parcoursdb;
+    private ArrayList<Parcours> lstAllParcours;
+
     // Dernière position obtenue.
     private Location mLastLocation = null;
+
     // Coordonnées initiales : Haute-ville de Québec.
     private final static LatLng QUEBEC_HAUTE_VILLE = new LatLng(46.813395, -71.215954);
     private boolean positionDetecte = false;
+    private Parcours parcourRecup;
+    Marker marquerDebut;
+    Marker marquerFin;
 
 
     @Override
@@ -42,11 +56,53 @@ public class map_activity extends FragmentActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_activity);
+
+        this.m_Parcoursdb = new ParcoursDataSource(this);
+        this.lstAllParcours = new ArrayList<Parcours>();
+        final Intent intent = getIntent();
+        Intent intentrecu = this.getIntent();
+        Bundle extra = intentrecu.getExtras();
+        this.parcourRecup = (Parcours) extra.getSerializable(DepartFragment.PARCOUR_CLICK);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         setUpMapIfNeeded();
         buildGoogleApiClient();
         createLocationRequest();
+
+        this.m_Parcoursdb.open();
+        this.lstAllParcours = this.m_Parcoursdb.getAllParcours();
+
+
+        String lattitudeDebut;
+        String longituteDebut;
+        String[] strCoordoDebut = new String[2];
+        String lattitudeArrive;
+        String longituteArrive;
+        String[] strCoordoArrive = new String[2];
+
+        strCoordoDebut = parcourRecup.getM_coordonneDeparts().split(";");
+        lattitudeDebut = strCoordoDebut[0];
+        longituteDebut = strCoordoDebut[1];
+
+        strCoordoArrive = parcourRecup.getM_coordonneArrive().split(";");
+        lattitudeArrive = strCoordoArrive[0];
+        longituteArrive = strCoordoArrive[1];
+
+        //ajout du point de départ sur la carte
+        marquerDebut = mMap.addMarker(new MarkerOptions()
+                .title("points de départs")
+                .snippet((Integer.toString(parcourRecup.getM_idParcour())))
+                .position(new LatLng(Double.valueOf(lattitudeDebut), Double.valueOf(longituteDebut)))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parcour_debut)));
+
+        //ajout du point de départ sur la carte
+        marquerFin = mMap.addMarker(new MarkerOptions()
+                .title("points d'arriver")
+                .snippet((Integer.toString(parcourRecup.getM_idParcour())))
+                .position(new LatLng(Double.valueOf(lattitudeArrive), Double.valueOf(longituteArrive)))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parcour_fin)));
+
     }
 
 
@@ -219,4 +275,11 @@ public class map_activity extends FragmentActivity implements
     public void onMapLongClick(LatLng latLng) {
 
     }
+
+    /**************************************************************************************************
+     * Classe insychronne permettant de générer l'itinéraire du parcours sur la carte.
+     **************************************************************************************************/
 }
+
+
+

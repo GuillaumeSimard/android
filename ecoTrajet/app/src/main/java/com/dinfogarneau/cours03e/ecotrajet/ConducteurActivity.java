@@ -3,6 +3,8 @@ package com.dinfogarneau.cours03e.ecotrajet;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -10,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dinfogarneau.cours03e.ecotrajet.adapters.OngletPagerAdapterConducteur;
+import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
+import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
+import com.dinfogarneau.cours03e.ecotrajet.fragment.DepartFragment;
 
 
 public class ConducteurActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -17,11 +22,27 @@ public class ConducteurActivity extends FragmentActivity implements ActionBar.Ta
     private ViewPager viewPager;
     private ActionBar actionBar;
     private OngletPagerAdapterConducteur ongletsPagerAdapter;
+    public static Utilisateur utilisateurRecup;
+
+    public static final String UTILISATEURCONNECTE = "Utilisateur connecté";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conducteur);
+
+        Intent intentrecu = this.getIntent();
+        Bundle extra = intentrecu.getExtras();
+
+        if(extra != null) {
+            if (extra.getSerializable(InscriptionActivity.UTILISATEURCONNECTE) != null) {
+                utilisateurRecup = (Utilisateur) extra.getSerializable(InscriptionActivity.UTILISATEURCONNECTE);
+            } else if (extra.getSerializable(modifPracourActivity.UTILISATEUR) != null) {
+                this.utilisateurRecup = (Utilisateur) extra.getSerializable(modifPracourActivity.UTILISATEUR);
+            }
+        }
+
+
 
         // Initilisations.
         this.viewPager = (ViewPager) this.findViewById(R.id.pager);
@@ -70,13 +91,11 @@ public class ConducteurActivity extends FragmentActivity implements ActionBar.Ta
         switch (item.getItemId()){
             case R.id.idAjoutDepart:
                 Intent i = new Intent(this, ajout_trajet.class);
+                i.putExtra(UTILISATEURCONNECTE, utilisateurRecup);
                 this.startActivity(i);
                 break;
-            case R.id.idVoirCarte:
-                Intent iMap = new Intent(this, map_activity.class);
-                this.startActivity(iMap);
-                break;
             case R.id.idDeconnetion:
+                deconnection();
                 Intent iD = new Intent(this, MainActivity.class);
                 this.startActivity(iD);
                 break;
@@ -98,5 +117,13 @@ public class ConducteurActivity extends FragmentActivity implements ActionBar.Ta
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
+    }
+
+    public void deconnection(){
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString("nomUtilisateur","");
+        editor.putString("motPasse", "");
+        editor.commit();
     }
 }

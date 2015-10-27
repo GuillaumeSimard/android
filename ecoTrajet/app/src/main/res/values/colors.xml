@@ -5,5 +5,6 @@
     <item name="grey" type="color">#555555</item>
     <item name="green" type="color">#4499CC00</item>
     <item name="darkgreen" type="color">#FF669900</item>
+    <item name="red" type="color">#ff0000</item>
 </resources>
 

@@ -53,6 +53,15 @@
         android:id="@+id/txtConnexionMotDePasse"
         android:inputType="textPassword"/>
 
+    <TextView
+        android:id="@+id/idMessageErreur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:textColor="@color/red"
+        android:textSize="20sp"/>
+
+
     <Button
         android:id="@+id/idBtnInscription"
         android:layout_width="wrap_content"

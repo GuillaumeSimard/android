@@ -9,11 +9,6 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item
-        android:id="@+id/idVoirCarte"
-        android:title="@string/TextVoirCarte"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/idDeconnetion"
         android:title="@string/TextDeconnetion"
         android:orderInCategory="100"

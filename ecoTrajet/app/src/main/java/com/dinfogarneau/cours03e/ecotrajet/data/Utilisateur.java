@@ -1,6 +1,7 @@
 package com.dinfogarneau.cours03e.ecotrajet.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Guillaume on 2015-10-02.
@@ -15,6 +16,7 @@ public class Utilisateur implements Serializable {
     private String m_courriel;
     private String m_motDePasse;
     private int m_idTypePassager;
+    private ArrayList<String> lstDemande;
 
 
     /*
@@ -28,6 +30,7 @@ public class Utilisateur implements Serializable {
         this.m_courriel = "";
         this.m_motDePasse = "";
         this.m_idTypePassager = -1;
+        lstDemande = new ArrayList<String>();
     }
 
     //constructeur paramètré de la classe utilisateur
@@ -40,6 +43,20 @@ public class Utilisateur implements Serializable {
         this.m_courriel = courriel;
         this.m_motDePasse = motPasse;
         this.m_idTypePassager = idType;
+        lstDemande = new ArrayList<String>();
+    }
+
+    //constructeur paramètré de la classe utilisateur
+    public Utilisateur(String nomUtil, String prenom, String nom, String noTel,
+                       String courriel, String motPasse, int idType, ArrayList<String> list){
+        this.m_nomUtilisateur = nomUtil;
+        this.m_prenom = prenom;
+        this.m_nom = nom;
+        this.m_noTelephone = noTel;
+        this.m_courriel = courriel;
+        this.m_motDePasse = motPasse;
+        this.m_idTypePassager = idType;
+        lstDemande = list;
     }
 
     public String getM_nomUtilisateur() {
@@ -96,5 +113,12 @@ public class Utilisateur implements Serializable {
 
     public void setM_idTypePassager(int m_idTypePassager) {
         this.m_idTypePassager = m_idTypePassager;
+    }
+    public ArrayList<String> get_list_demande() {
+        return lstDemande;
+    }
+
+    public void set_list_demande(ArrayList<String> demande) {
+        this.lstDemande = demande;
     }
 }

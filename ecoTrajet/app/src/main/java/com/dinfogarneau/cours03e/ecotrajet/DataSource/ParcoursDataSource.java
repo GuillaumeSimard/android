@@ -33,6 +33,7 @@ public class ParcoursDataSource {
     private static final String COL_IDREGION = "idRegion";
     private static final String COL_COORDONNE_DEPART = "coordonneDepart";
     private static final String COL_COORDONNE_ARRIVE = "coordonneArrive";
+    private static final String COL_NOM_CONDUCTEUR = "nomConducteur";
 
 
     // Constantes pour les indices des champs dans la BD.
@@ -46,6 +47,7 @@ public class ParcoursDataSource {
     private static final int IDX_IDREGION = 7;
     private static final int IDX_COORDONNE_DEPART = 8;
     private static final int IDX_COORDONNE_ARRIVE = 9;
+    private static final int IDX_NOM_CONDUCTEUR = 10;
 
     private sqlDataSource m_HelperSite;
     private SQLiteDatabase m_Db;
@@ -85,6 +87,7 @@ public class ParcoursDataSource {
         row.put(COL_IDREGION, unParcours.getM_idRegion());
         row.put(COL_COORDONNE_DEPART, unParcours.getM_coordonneDeparts());
         row.put(COL_COORDONNE_ARRIVE, unParcours.getM_coordonneArrive());
+        row.put(COL_NOM_CONDUCTEUR, unParcours.getM_nomConducteure());
         return row;
     }
 
@@ -102,6 +105,7 @@ public class ParcoursDataSource {
         unParcours.setM_idRegion(cursor.getInt(IDX_IDREGION));
         unParcours.setM_coordonneDeparts(cursor.getString(IDX_COORDONNE_DEPART));
         unParcours.setM_coordonneArrive(cursor.getString(IDX_COORDONNE_ARRIVE));
+        unParcours.setM_nomConducteure(cursor.getString((IDX_NOM_CONDUCTEUR)));
         return unParcours;
 
     }
@@ -151,7 +155,7 @@ public class ParcoursDataSource {
     {
         ArrayList<Parcours> list = new ArrayList<Parcours>();
 
-        Cursor c = m_Db.rawQuery("SELECT _id,nomParcour,nbPlaceDisponible,nbPlacePrise,dateParcour,heure,coutPersonne,idRegion,coordonneDepart,coordonneArrive FROM Parcours INNER JOIN ParcoursUtilisateur ON Parcours._id = ParcoursUtilisateur._idParcours  WHERE ParcoursUtilisateur.nomUtil = '" + nom + "'", null);
+        Cursor c = m_Db.rawQuery("SELECT _id,nomParcour,nbPlaceDisponible,nbPlacePrise,dateParcour,heure,coutPersonne,idRegion,coordonneDepart,coordonneArrive,nomConducteur FROM Parcours  WHERE nomConducteur = '" + nom + "'", null);
 
         c.moveToFirst();
 
@@ -159,7 +163,7 @@ public class ParcoursDataSource {
         {
             list.add(new Parcours(c.getInt(c.getColumnIndex("_id")),c.getString(c.getColumnIndex("nomParcour")),c.getInt(c.getColumnIndex("nbPlaceDisponible")),
                                   c.getInt(c.getColumnIndex("nbPlacePrise")),c.getString(c.getColumnIndex("dateParcour")),c.getString(c.getColumnIndex("heure")),c.getDouble(c.getColumnIndex("coutPersonne")),c.getInt(c.getColumnIndex("idRegion")),
-                                  c.getString(c.getColumnIndex("coordonneDepart")),c.getString(c.getColumnIndex("coordonneArrive"))));
+                                  c.getString(c.getColumnIndex("coordonneDepart")),c.getString(c.getColumnIndex("coordonneArrive")), c.getString(c.getColumnIndex("nomConducteur"))));
 
             c.moveToNext();
         }
@@ -171,7 +175,7 @@ public class ParcoursDataSource {
     {
         ArrayList<Parcours> list = new ArrayList<Parcours>();
 
-        Cursor c = m_Db.rawQuery("SELECT _id,nomParcour,nbPlaceDisponible,nbPlacePrise, dateParcour,heure,coutPersonne,idRegion,coordonneDepart,coordonneArrive FROM Parcours", null);
+        Cursor c = m_Db.rawQuery("SELECT _id,nomParcour,nbPlaceDisponible,nbPlacePrise, dateParcour,heure,coutPersonne,idRegion,coordonneDepart,coordonneArrive, nomConducteur FROM Parcours", null);
 
         c.moveToFirst();
 
@@ -179,7 +183,7 @@ public class ParcoursDataSource {
         {
             list.add(new Parcours(c.getInt(c.getColumnIndex("_id")),c.getString(c.getColumnIndex("nomParcour")),c.getInt(c.getColumnIndex("nbPlaceDisponible")),
                     c.getInt(c.getColumnIndex("nbPlacePrise")),c.getString(c.getColumnIndex("dateParcour")),c.getString(c.getColumnIndex("heure")),c.getDouble(c.getColumnIndex("coutPersonne")),c.getInt(c.getColumnIndex("idRegion")),
-                    c.getString(c.getColumnIndex("coordonneDepart")),c.getString(c.getColumnIndex("coordonneArrive"))));
+                    c.getString(c.getColumnIndex("coordonneDepart")),c.getString(c.getColumnIndex("coordonneArrive")), c.getString(c.getColumnIndex("nomConducteur"))));
 
             c.moveToNext();
         }

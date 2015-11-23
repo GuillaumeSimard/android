@@ -1,6 +1,7 @@
 package com.dinfogarneau.cours03e.ecotrajet.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,10 @@ public class Parcours implements Serializable {
     private int m_idRegion;
     private String m_coordonneDeparts;
     private String m_coordonneArrive;
+    private String m_nomConducteure;
+
+    //attribut spécifique au Services Web
+    public ArrayList<String> lstPassager;
 
     public Parcours()
     {
@@ -37,10 +42,12 @@ public class Parcours implements Serializable {
         this.m_idRegion = -1;
         this.m_coordonneDeparts = "";
         this.m_coordonneArrive = "";
+        this.m_nomConducteure = "";
     }
 
+    //constructeur paramètré sans la liste de psassager
     public Parcours(int id, String nom, int nbPlace,int nbPlacePrice, String date,String heure, double cout,
-                    int idRegion,String depart, String arrive ){
+                    int idRegion,String depart, String arrive, String nomConducteur ){
         this.m_idParcour = id;
         this.m_nomParcour = nom;
         this.m_nbPlaceDisponible = nbPlace;
@@ -51,7 +58,28 @@ public class Parcours implements Serializable {
         this.m_idRegion = idRegion;
         this.m_coordonneDeparts = depart;
         this.m_coordonneArrive = arrive;
+        this.m_nomConducteure = nomConducteur;
     }
+
+    //constructeur paramètré incluant la list de passager
+    public Parcours(int id, String nom, int nbPlace,int nbPlacePrice, String date,String heure, double cout,
+                    int idRegion,String depart, String arrive, String nomConducteur, ArrayList<String> lstPassager ) {
+
+        this.m_idParcour = id;
+        this.m_nomParcour = nom;
+        this.m_nbPlaceDisponible = nbPlace;
+        this.m_nbPlacePrise = nbPlacePrice;
+        this.m_dateParcours = date;
+        this.m_Heure = heure;
+        this.m_coutPersonne = cout;
+        this.m_idRegion = idRegion;
+        this.m_coordonneDeparts = depart;
+        this.m_coordonneArrive = arrive;
+        this.m_nomConducteure = nomConducteur;
+        this.lstPassager = lstPassager;
+
+    }
+
 
 
     public int getM_idParcour() {
@@ -133,5 +161,13 @@ public class Parcours implements Serializable {
 
     public void setM_Heure(String m_Heure) {
         this.m_Heure = m_Heure;
+    }
+
+    public String getM_nomConducteure() {
+        return m_nomConducteure;
+    }
+
+    public void setM_nomConducteure(String m_nomConducteure) {
+        this.m_nomConducteure = m_nomConducteure;
     }
 }

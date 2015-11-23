@@ -102,8 +102,8 @@ public class DepartFragment extends ListFragment {
             case R.id.idDeleteDeparts:
                 parcoursDataSource.open();
                 parcoursPassager.open();
-                parcoursDataSource.delete(menuInfo.position + 1);
-                 parcoursPassager.delete(menuInfo.position + 1, ConducteurActivity.utilisateurRecup.getM_nomUtilisateur());
+                parcoursDataSource.delete(lstDepart.get(menuInfo.position).getM_idParcour());
+                 parcoursPassager.delete(lstDepart.get(menuInfo.position).getM_idParcour(), ConducteurActivity.utilisateurRecup.getM_nomUtilisateur());
 
                 lstDepart = parcoursDataSource.getAllParcoursConduc(ConducteurActivity.utilisateurRecup.getM_nomUtilisateur());
                 this.m_RowModels = null;

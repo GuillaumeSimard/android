@@ -39,20 +39,16 @@ public class sqlDataSource  extends SQLiteOpenHelper {
                 + "(_nomUtilisateur text primary key,"
                         + "prenom text, nom text, noTelephone text,"
                         +" email text, motDePasse text, idTypePassager text,"
-                        + "foreign key (idTypePassager) REFERENCES "  + TABLE_NAME_TYPE_UTILISATEUR +  "(_id))");
+                        + "foreign key (idTypePassager) REFERENCES "  + TABLE_NAME_TYPE_UTILISATEUR +  "(_id)),"
+                        );
 
         db.execSQL( "create table " + TABLE_NAME_PARCOURS
                 + " (_id integer primary key autoincrement, "
                 + "nomParcour text, nbPlaceDisponible integer,nbPlacePrise integer, dateParcour string, "
                 + "heure text, coutPersonne double, idRegion integer, coordonneDepart text, "
-                + "coordonneArrive text, "
-                + "foreign key (idRegion) REFERENCES " + TABLE_NAME_REGION_ADMINISTRATIVE + "(_id))");
-
-        db.execSQL( "create table " + TABLE_NAME_PARCOURS_UTILISATEUR
-                + " (_idParcours integer, nomUtil text," +
-                        "PRIMARY KEY (_idParcours,nomUtil),"+
-                        "foreign key (_idParcours) REFERENCES " + TABLE_NAME_PARCOURS + "(_id)," +
-                        "foreign key (nomUtil) REFERENCES " + TABLE_NAME_UTILISATEURS + "(_nomUtilisateur))");
+                + "coordonneArrive text, nomConducteur text"
+                + "foreign key (idRegion) REFERENCES " + TABLE_NAME_REGION_ADMINISTRATIVE + "(_id),"
+                + "foreign key (nomConducteur) REFERENCES " + TABLE_NAME_UTILISATEURS + "(_nomUtilisateur))");
 
         //insertion des type d'utilisateur
         db.execSQL("INSERT INTO TypeUtilisateur VALUES (1,'Conducteur')");

@@ -461,6 +461,7 @@ public class ajout_trajet extends FragmentActivity implements
                                     parcoursAdd.setM_coutPersonne(Integer.parseInt(cout.getText().toString()));
                                 }
                                 parcoursAdd.setM_idParcour(iNombre + 1);
+                                parcoursAdd.setM_nomConducteure(utilisateurRecup.getM_nomUtilisateur());
 
                                     if(Date != null)
                                     {

@@ -273,7 +273,7 @@
     <string name="text_Modif_Parcour">Modiification du parcours</string>
     <string name="TitreErreur">Erreur lors de l\'inscription</string>
     <string name="TextErreurConnexion">Tous les champs doivent être complétés afin de vous inscrire</string>
-    <string name="AideResultat_Title">Aide_resultats_recherche</string>
+    <string name="AideResultat_Title">Aide resultats recherche</string>
     <string name="AideResultat">Aide sur le résultat de la recherche.</string>
     <string name="AideResultatRecherche">Vous trouverez ici, la liste des parcours correspondant à votre recherche. Afin de visualiser les détails d\'un parcours, vous devez apuyer sur un parcours de la liste.</string>
 </resources>

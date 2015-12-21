@@ -6,10 +6,10 @@
     android:orientation="vertical">
 
     <TextView
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lblNomUtil"
-        android:text="@string/lblNomUtil"
+        android:id="@+id/lblNomDemandes"
         android:textSize="25dp"
         android:textStyle="bold"
         android:gravity="center"

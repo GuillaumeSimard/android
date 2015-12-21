@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
 import com.dinfogarneau.cours03e.ecotrajet.sqlHelper.sqlDataSource;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Guillaume on 2015-10-02.

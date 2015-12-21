@@ -8,5 +8,14 @@
         android:title="@string/inscription_menu_accept"
         android:icon="@mipmap/ic_action_accept"
         android:orderInCategory="100"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/idDeconnetion"
+        android:title="@string/TextDeconnetion"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/aide_AjoutTrajet" android:title="@string/AideAjoutTrajetMenu"
+        android:orderInCategory="100" app:showAsAction="always" />
 </menu>

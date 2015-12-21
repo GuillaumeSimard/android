@@ -59,6 +59,28 @@ public class Utilisateur implements Serializable {
         lstDemande = list;
     }
 
+    public Utilisateur(String nomUtil, String motPasse)
+    {
+        this.m_nomUtilisateur = nomUtil;
+        this.m_motDePasse = motPasse;
+        this.m_prenom = "";
+        this.m_nom = "";
+        this.m_noTelephone = "";
+        this.m_idTypePassager = -1;
+        lstDemande = new ArrayList<String>();
+    }
+
+    public Utilisateur(String nomUtil, String motPasse, int idTypePassager)
+    {
+        this.m_nomUtilisateur = nomUtil;
+        this.m_motDePasse = motPasse;
+        this.m_prenom = "";
+        this.m_nom = "";
+        this.m_noTelephone = "";
+        this.m_idTypePassager = idTypePassager;
+        lstDemande = new ArrayList<String>();
+    }
+
     public String getM_nomUtilisateur() {
         return m_nomUtilisateur;
     }

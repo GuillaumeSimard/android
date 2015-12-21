@@ -5,11 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
 import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
 import com.dinfogarneau.cours03e.ecotrajet.sqlHelper.sqlDataSource;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -121,14 +119,13 @@ public class UtilisateurDataSource {
         return lstType;
     }
     /**
-     * Méthode permettant de vérifier l'utilisateur lors de la connexion
-     * @param nomUtil
-     * @param motPasse
+     * Méthode permettant de récuperer un utilisateur lors de la connexion.
+     * @param nom_util
      * @return
      */
-    public Utilisateur connexionUtil(String nomUtil, String motPasse) {
+    public Utilisateur RecupUtilisateur(String nom_util) {
         Utilisateur utilConnect = null;
-        Cursor c = m_Db.rawQuery("SELECT _nomUtilisateur, prenom,nom, noTelephone, email, motDePasse, idTypePassager FROM Utilisateurs WHERE  _nomUtilisateur =  '"+ nomUtil + "' AND motDePasse = '" + motPasse + "'", null);
+        Cursor c = m_Db.rawQuery("SELECT _nomUtilisateur, prenom,nom, noTelephone, email, motDePasse, idTypePassager FROM Utilisateurs WHERE  _nomUtilisateur =  '"+ nom_util + "'", null);
         if(c.getCount() > 0){
             c.moveToFirst();
             utilConnect = lireLigneSite(c);

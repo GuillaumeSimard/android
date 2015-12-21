@@ -4,12 +4,15 @@ import logging
 import traceback
 import datetime
 import json
+import math
+
 
 
 from models import Parcours, Utilisateurs
 
 from google.appengine.ext import ndb
 from google.appengine.ext import db
+
 
 
 def serialiser_pour_json(objet):
@@ -19,6 +22,20 @@ def serialiser_pour_json(objet):
         return objet.isoformat()
     else:
         return objet
+
+def distance(origin, destination):
+    lat1, lon1 = origin
+    lat2, lon2 = destination
+    radius = 6371 # km
+
+    dlat = math.radians(lat2-lat1)
+    dlon = math.radians(lon2-lon1)
+    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
+        * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    d = radius * c
+
+    return d
 
 
 class MainPageHandler(webapp2.RequestHandler):
@@ -41,7 +58,7 @@ class ConnexionHandler(webapp2.RequestHandler):
             dude = cle.get()
 
             # Si l'utilisateur n'existe pas retourner une erruer
-            if dude is None or dude.motPasse != dude_dict_in['motDePasse']:
+            if dude is None or dude.motDePasse != dude_dict_in['motDePasse']:
                 status = 400
                 dude_dict_out = {}
                 dude_dict_out['erreur'] = "Combinaison nomUtilisateur, mot de passe incorrect."
@@ -117,16 +134,81 @@ class ParcoursHandler(webapp2.RequestHandler):
     def get(self):
             try:
                 liste_parcours = []
+                list_ajout = []
                 requete = Parcours.query()
+                
+                dateParcour = self.request.get('dateParcour')
+                coordoDemanderDepart = self.request.get('coordoDepart')
+                coordoDemanderArriver = self.request.get('coordoArrive') 
+                for parcours in requete:
+                    
+                    if str(dateParcour) is not "":
+                        if parcours.dateParcour == str(dateParcour): 
+                            
+                            if parcours.nbPlacePrise < parcours.nbPlaceDisponible:
+                                
+                                if coordoDemanderDepart is not "" and coordoDemanderArriver is not "":
+                                    coordoDepart = parcours.coordonneDepart.split(';')
+                                    lat1 = coordoDepart[0]
+                                    long1 = coordoDepart[1]
+                
+                                    coordoArrive = parcours.coordonneArrive.split(';')
+                                    lat2 = coordoArrive[0]
+                                    long2 = coordoArrive[1]
+                                    
+                                    coordoDepartDemande = coordoDemanderDepart.split(' ')
+                                    latDemande1 = coordoDepartDemande[0]
+                                    longDemande1 = coordoDepartDemande[1]
+                                                    
+                                    coordoArriveDemande = coordoDemanderArriver.split(' ')
+                                    latDemande2 = coordoArriveDemande[0]
+                                    longDemande2 = coordoArriveDemande[1]
+                                    logging.info(float(longDemande2))
+                                    if (distance((float(lat1), float(long1)),(float(latDemande1), float(longDemande1))) <= 3.5) and (distance((float(lat2), float(long2)),(float(latDemande2), float(longDemande2))) <= 3.5):
+        
+                                        pers_dict = parcours.to_dict()
+                                        pers_dict['idParcours'] = parcours.key.id()
+                                        list_ajout.append(pers_dict)
 
-                for unParcour in requete:
-                    pers_dict = unParcour.to_dict()
-                    pers_dict['idParcours'] = unParcour.key.id()
-                    # Ajout de la personne dans la liste.
-                    liste_parcours.append(pers_dict)
+                                else:
+                                    pers_dict = parcours.to_dict()
+                                    pers_dict['idParcours'] = parcours.key.id()
+                                    list_ajout.append(pers_dict)
+                                    
+                    else:
+                            if coordoDemanderDepart is not "" and coordoDemanderArriver is not "":
+                                
+                                coordoDepart = parcours.coordonneDepart.split(';')
+                                lat1 = coordoDepart[0]
+                                long1 = coordoDepart[1]
+                
+                                coordoArrive = parcours.coordonneArrive.split(';')
+                                lat2 = coordoArrive[0]
+                                long2 = coordoArrive[1]
+                                
+                                coordoDepartDemande = coordoDemanderDepart.split(' ')
+                                latDemande1 = coordoDepartDemande[0]
+                                longDemande1 = coordoDepartDemande[1]
+                                                
+                                coordoArriveDemande = coordoDemanderDepart.split(' ')
+                                latDemande2 = coordoArriveDemande[0]
+                                longDemande2 = coordoArriveDemande[1]
+                                logging.info(coordoDemanderDepart)
+                                
+                                if distance((float(lat1), float(long1)),(float(latDemande1), float(longDemande1))) <= 5 and distance((float(lat2), float(long2)),(float(latDemande2), float(longDemande2))) <= 5:
+                                    
+                                    pers_dict = parcours.to_dict()
+                                    pers_dict['idParcours'] = parcours.key.id()
+                                    list_ajout.append(pers_dict)
+                            else:
+                                
+                                pers_dict = parcours.to_dict()
+                                pers_dict['idParcours'] = parcours.key.id()
+                                list_ajout.append(pers_dict)
+                                        
 
-                json_data = json.dumps(liste_parcours, default=serialiser_pour_json)
-
+                json_data = json.dumps(list_ajout, default=serialiser_pour_json)
+    
                 self.response.set_status(200)
                 self.response.headers['Content-Type'] = ('application/json;' +
                                                          ' charset=utf-8')
@@ -143,19 +225,17 @@ class ParcoursHandler(webapp2.RequestHandler):
 
 class ParcourHandler(webapp2.RequestHandler):
 
-    def get(self, _nomUtilisateur=None,_id=None ):
+    def get(self, _nomUtilisateur,_id=None ):
         try: 
-            cle_demand = ndb.Key('Utilisateurs', _nomUtilisateur) 
-            get_demand = cle_demand.get()
-            if _nomUtilisateur is not None and _id is not None:
+            if _id is not None:
                 
                 cle_get_Parcours = ndb.Key('Parcours',long(_id))
                 get_Parcours = cle_get_Parcours.get()
                
-                if get_Parcours is None or get_demand is None:
+                if get_Parcours is None:
                     self.error(404)
                     return
-                elif get_demand.prenom == get_Parcours.nomConducteur:
+                elif _nomUtilisateur== get_Parcours.nomConducteur:
                     status = 200
                 else:
                     self.error(401)
@@ -165,24 +245,35 @@ class ParcourHandler(webapp2.RequestHandler):
                 json_data = json.dumps(dict_parcours_out, default=serialiser_pour_json)
                 self.response.set_status(status)
 
-            elif _id is None:
+            else:
+                cle_util = ndb.Key("Utilisateurs",_nomUtilisateur)
+                util = cle_util.get()
+                
+                if util is None:
+                    self.error(404)
+                    return 
+                
                 liste_Parcours = []
                 requete = Parcours.query()
 
-                requete = requete.filter(Parcours.nomConducteur == get_demand.prenom)
+                if util.idTypePassager == 2:
+                    for parcours in requete:
+                        if util.prenom in parcours.listePassager:
+                              pers_dict = parcours.to_dict()
+                              pers_dict['_id'] = parcours.key.id()
+                              liste_Parcours.append(pers_dict)
+                else:
+                    requete = requete.filter(Parcours.nomConducteur == _nomUtilisateur)
 
-                for unParcour in requete:
-                    pers_dict = unParcour.to_dict()
-                    pers_dict['_id'] = unParcour.key.id()
-                    # Ajout de la personne dans la liste.
-                    liste_Parcours.append(pers_dict)
+                    for unParcour in requete:
+                        pers_dict = unParcour.to_dict()
+                        pers_dict['_id'] = unParcour.key.id()
+                        # Ajout de la personne dans la liste.
+                        liste_Parcours.append(pers_dict)
 
                 json_data = json.dumps(liste_Parcours, default=serialiser_pour_json)
 
                 self.response.set_status(200)
-            else:
-                self.error(400)
-                return
 
             self.response.headers['Content-Type'] = ('application/json;' +
                                                      ' charset=utf-8')
@@ -199,16 +290,13 @@ class ParcourHandler(webapp2.RequestHandler):
     def put(self,_id, _nomUtilisateur):
         try:
             cle_Parcours = ndb.Key('Parcours', long(_id))
-            cle_conducteur = ndb.Key('Utilisateurs', _nomUtilisateur)
-            conducteur = cle_conducteur.get()
             parcourAjout = cle_Parcours.get()
 
-            if parcourAjout is None and conducteur is None:
+            if parcourAjout is None:
                 self.error(404)
                 return
             else:
                 status = 200
-
             parcour_dict_in = json.loads(self.request.body)
             parcourAjout.nomParcours = parcour_dict_in['nomParcour']
             parcourAjout.nbPlaceDisponible = parcour_dict_in['nbPlaceDisponible']
@@ -219,7 +307,7 @@ class ParcourHandler(webapp2.RequestHandler):
             parcourAjout.idRegion = parcour_dict_in['idRegion']
             parcourAjout.coordonneDepart = parcour_dict_in['coordonneDepart']
             parcourAjout.coordonneArrive = parcour_dict_in['coordonneArrive']
-            parcourAjout.nomConducteur = conducteur.prenom
+            parcourAjout.nomConducteur = _nomUtilisateur
 
             cle_Parcours = parcourAjout.put()
 
@@ -306,7 +394,6 @@ class ParcourHandler(webapp2.RequestHandler):
 class ParcoursPassageHandler(webapp2.RequestHandler):
     def get(self, _id):
         try:
-            
             cle_dude = ndb.Key('Parcours', long(_id))
             passager = cle_dude.get()
             if passager is None:
@@ -350,7 +437,6 @@ class ParcoursPassageHandler(webapp2.RequestHandler):
                 status = 200;
                 if "1" + passager.prenom in parcours.listePassager:
                     parcours.listePassager.remove("1" + passager.prenom)
-
             parcours.put()
 
             self.response.set_status(status)
@@ -494,7 +580,7 @@ app = webapp2.WSGIApplication(
                       methods=['POST', 'GET']),
         webapp2.Route(r'/utilisateurs/<_nomUtilisateur>/Parcours/<_id>',
                       handler=ParcourHandler,
-                      methods=['GET']),
+                      methods=['GET', 'PUT']),
         webapp2.Route(r'/parcours/<_id>/passager',
                       handler=ParcoursPassageHandler,
                       methods=['GET']),

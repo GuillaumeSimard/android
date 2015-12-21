@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,18 +21,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcourPassagerDataSource;
 import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcoursDataSource;
 import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
 import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
 import com.dinfogarneau.cours03e.ecotrajet.fragment.DepartFragment;
+import com.dinfogarneau.cours03e.ecotrajet.unit.JSonParser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import android.util.Log;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -38,7 +39,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -47,18 +55,10 @@ public class modifPracourActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
 
-    private static LatLng PARCOURS_COORDONNE = null;
-    private final static LatLng QUEBEC_HAUTE_VILLE = new LatLng(46.813395, -71.215954);
-    public static String UTILISATEUR = "utilisateur";
-
-    private final String TAG = getClass().getSimpleName();
-
-
     //déclaration des variables
     private Dialog dialogConfirmation;
     private Parcours parcoursRecup = null;
     private ParcoursDataSource parcoursDb;
-    ParcourPassagerDataSource parcourUtil;
     private double lattitueDepart = 0;
     private double longitudeDepart = 0;
     private double lattitueArrive = 0;
@@ -69,7 +69,15 @@ public class modifPracourActivity extends FragmentActivity implements
     Boolean estReinitialise = false;
     private Location mLastLocation = null;
     private boolean positionDetecte = false;
+    private static LatLng PARCOURS_COORDONNE = null;
+    private final static LatLng QUEBEC_HAUTE_VILLE = new LatLng(46.813395, -71.215954);
+    public static String UTILISATEUR = "utilisateur";
+    public static String PARCOURS = "parcours";
 
+    ConnectivityManager connManager;
+    NetworkInfo mWifi;
+    NetworkInfo m3G;
+    private Dialog dialogErreur;
 
     private GoogleMap mMap;
     TextView textTitre;
@@ -91,21 +99,32 @@ public class modifPracourActivity extends FragmentActivity implements
     int iCompteur = 1;
     boolean tourner = false;
 
+    private final static String WEB_SERVICE_URL = "ecotrajet-1065.appspot.com";
+    private final static String REST_UTILISATEURS = "/utilisateurs";
+    private final static String REST_PARCOURS = "/Parcours";
+    private final String TAG = this.getClass().getSimpleName();
+    private HttpClient m_ClientHttp = new DefaultHttpClient();
+    AlertDialog dialogAide;
+
+
+    /**
+     * Méthode utilisée afin de créer l'activité.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modif_parcour);
 
         parcoursDb = new ParcoursDataSource((this));
-        parcourUtil = new ParcourPassagerDataSource((this));
 
 
         Intent intentrecu = this.getIntent();
         Bundle extra = intentrecu.getExtras();
 
-            this.parcoursRecup = (Parcours) extra.getSerializable(DepartFragment.PARCOUR_CLICK);
-
         this.utilRecap = (Utilisateur) extra.getSerializable(DepartFragment.UTILISATEUR);
+        this.parcoursRecup = (Parcours) extra.getSerializable(DepartFragment.PARCOUR_CLICK);
+
 
         textTitre = (TextView) findViewById(R.id.idTextEnteteModif);
         nomParcours = (EditText) findViewById(R.id.idNomParcoursModif);
@@ -217,7 +236,6 @@ public class modifPracourActivity extends FragmentActivity implements
                         }
                     }
                 }
-
             }
         });
     }
@@ -320,7 +338,7 @@ public class modifPracourActivity extends FragmentActivity implements
                     @Override
                     public boolean onCreateOptionsMenu(Menu menu) {
                         // Inflate the menu; this adds items to the action bar if it is present.
-                        getMenuInflater().inflate(R.menu.menu_ajout_trajet, menu);
+                        getMenuInflater().inflate(R.menu.menu_modif_pracour, menu);
                         return true;
                     }
 
@@ -331,10 +349,34 @@ public class modifPracourActivity extends FragmentActivity implements
                         // as you specify a parent activity in AndroidManifest.xml.
                         int id = item.getItemId();
 
-                        //noinspection SimplifiableIfStatement
-                        if (id == R.id.idAjoutTrajetM) {
-                            afficherPopop();
-                            return true;
+                        switch(id)
+                        {
+                            case R.id.idModifParcour:
+                                afficherPopop();
+                                break;
+
+                            case R.id.aide_ModifParcours:
+
+                                if(dialogAide== null) {
+                                    dialogAide = new AlertDialog.Builder(this)
+                                            .setTitle(R.string.AideModifParcoursMenu)
+                                            .setMessage(R.string.ModificationParcoursAide)
+                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                                                //méthode permettant la suppression
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            })
+                                            .create();
+                                    dialogAide.setOwnerActivity(this);
+                                    dialogAide.show();
+                                }
+                                else{
+                                    dialogAide.show();
+                                }
+                                break;
                         }
 
                         return super.onOptionsItemSelected(item);
@@ -430,12 +472,12 @@ public class modifPracourActivity extends FragmentActivity implements
                                             parcoursRecup.setM_idParcour(parcoursRecup.getM_idParcour());
 
                                             if(parcoursRecup.getM_coordonneDeparts() != null && parcoursRecup.getM_coordonneArrive() != null){
-                                                parcoursDb.open();
-                                                parcoursDb.update(parcoursRecup);
 
-                                                Intent intentConducteur = new Intent(getApplicationContext(), ConducteurActivity.class);
-                                                intentConducteur.putExtra(UTILISATEUR, utilRecap);
-                                                startActivity(intentConducteur);
+                                                    new UpdateParcoursTask().execute((Void) null);
+
+                                                    Intent intentConducteur = new Intent(getApplicationContext(), ConducteurActivity.class);
+                                                    intentConducteur.putExtra(UTILISATEUR, utilRecap);
+                                                    startActivity(intentConducteur);
                                             }
                                             else{
                                                 Toast.makeText(getApplicationContext(), "vous devez entrer des coordonné pour modifier ce parcours", Toast.LENGTH_SHORT).show();
@@ -460,28 +502,26 @@ public class modifPracourActivity extends FragmentActivity implements
                         String parts[] = new String[3];
                         if(Date == null) {
                             parts = this.parcoursRecup.getM_dateParcours().split("/");
+                            Date = parcoursRecup.getM_dateParcours();
+
                         }
                         else{
                             parts =this.Date.split("/");
                         }
 
+
+
+                        //set des valeur dans le calendrier.
                         int jour = Integer.parseInt(parts[0]);
                         int mois = Integer.parseInt(parts[1]);
                         int annee = Integer.parseInt(parts[2]);
-
                         calendarInstance.set(Calendar.YEAR, annee);
-                        calendarInstance.set(Calendar.MONTH, mois);
+                        calendarInstance.set(Calendar.MONTH, mois-1);
                         calendarInstance.set(Calendar.DAY_OF_MONTH, jour);
-
-                        long milliTime = calendarInstance.getTimeInMillis();
-                        calendar.setDate(milliTime, true, true);
+                        calendar.setDate(calendarInstance.getTimeInMillis(),true,true);
 
                         calendar.setShowWeekNumber(false);
                         calendar.setFirstDayOfWeek(2);
-
-                        if( Date == null) {
-                            Date = this.parcoursRecup.getM_dateParcours();
-                        }
 
                         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -536,6 +576,9 @@ public class modifPracourActivity extends FragmentActivity implements
         mLocationRequest.setInterval(10 * 1000);
     }
 
+    /****************************************************************************************
+     * Gestion des cycles
+     ***************************************************************************************/
 
     @Override
     protected void onStart() {
@@ -578,6 +621,13 @@ public class modifPracourActivity extends FragmentActivity implements
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+
     protected void startLocationUpdates() {
 
         if(mGoogleApiClient != null) {
@@ -586,6 +636,8 @@ public class modifPracourActivity extends FragmentActivity implements
             }
         }
     }
+
+
 
 
     /* Implémentation de l'interface "GoogleApiClient.ConnectionCallbacks" */
@@ -648,5 +700,68 @@ public class modifPracourActivity extends FragmentActivity implements
             estReinitialise = false;
         }
     }
+    /**********************************************************************************************
+     * Sous classe Asynchrone permettant de modifier d'un parcours au services web
+     **********************************************************************************************/
+    private class UpdateParcoursTask extends AsyncTask<Void, Void, Void> {
+        Exception m_Exp;
 
+        @Override
+        protected void onPreExecute() {
+            setProgressBarIndeterminateVisibility(true);
+        }
+
+        @Override
+        protected Void doInBackground(Void ... unused) {
+            try {
+
+                URI uri = new URI("http", WEB_SERVICE_URL, REST_UTILISATEURS + "/" + utilRecap.getM_nomUtilisateur()  + REST_PARCOURS + "/" + parcoursRecup.getM_idServiceWeb(), null, null);
+                HttpPut putMethod = new HttpPut(uri);
+
+                JSONObject obj = JSonParser.serialiserJsonParcours(parcoursRecup);
+                putMethod.setEntity(new StringEntity(obj.toString()));
+                putMethod.addHeader("Content-Type", "application/json");
+
+                m_ClientHttp.execute(putMethod, new BasicResponseHandler());
+                Log.i(TAG, "Put terminé");
+
+            } catch (Exception e) {
+                m_Exp = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            setProgressBarIndeterminateVisibility(false);
+
+            if (m_Exp == null) {
+            } else {
+                Log.e(TAG, "Error while posting", m_Exp);
+                Toast.makeText(modifPracourActivity.this, getString(R.string.comm_error), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //méthode permmettant d'afficher un popop
+    private void afficherMessage() {
+
+        if(dialogConfirmation== null) {
+            dialogConfirmation = new AlertDialog.Builder(this)
+                    .setTitle(R.string.titreErreurConnection)
+                    .setMessage(R.string.btextErreurConnexion)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                        //méthode permettant la suppression
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create();
+            dialogConfirmation.show();
+        }
+        else{
+            dialogConfirmation.show();
+        }
+    }
 }

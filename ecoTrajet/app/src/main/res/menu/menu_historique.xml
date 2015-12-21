@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/idInscHistorique"
         android:title="@string/historique_menu_text"
         android:orderInCategory="100" />
+
+    <item xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/idDeconnetion"
+        android:title="@string/TextDeconnetion"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/aide_Historique" android:title="@string/AideHistoriqueMenu"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

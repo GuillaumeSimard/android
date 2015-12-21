@@ -2,16 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dinfogarneau.cours03e.ecotrajet" >
 
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="23" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -27,6 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".InscriptionActivity"
             android:label="@string/title_activity_inscription_"
@@ -37,27 +46,19 @@
         </activity>
         <activity
             android:name=".ConducteurActivity"
-            android:label="@string/title_activity_conducteur">
+            android:label="@string/title_activity_conducteur" >
         </activity>
         <activity
             android:name=".HistoriqueActivity"
-            android:label="@string/title_historiqueActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:label="@string/title_historiqueActivity" />
         <activity
             android:name=".RechercheActivity"
-            android:label="@string/title_rechercheActivity"
-            android:parentActivityName=".HistoriqueActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
+            android:label="@string/title_rechercheActivity">
+
         </activity>
         <activity
             android:name=".ResultatRechercheActivity"
-            android:label="@string/title_resultatRechercheActivity"
-            android:parentActivityName=".RechercheActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.MainActivity" />
+            android:label="@string/title_resultatRechercheActivity">
         </activity>
         <activity
             android:name=".DescriptionParcoursActivity"
@@ -70,14 +71,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".map_activity"
-            android:label="@string/title_activity_map_activity"
-            android:parentActivityName=".ConducteurActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dinfogarneau.cours03e.ecotrajet.ConducteurActivity" />
-        </activity>
         <activity
             android:name=".ajout_trajet"
             android:label="@string/title_activity_ajout_trajet"
@@ -94,6 +87,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dinfogarneau.cours03e.ecotrajet.ConducteurActivity" />
         </activity>
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".notification.AlarmService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".notification.BootReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -8,8 +8,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lblNomUtil"
-        android:text="@string/lblNomUtil"
+        android:id="@+id/lblNomUtilP"
         android:textSize="25dp"
         android:textStyle="bold"
         android:gravity="center"
@@ -25,6 +24,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@android:id/list"/>
+        android:id="@android:id/list"
+        android:textColor="@color/red"/>
 
 </LinearLayout>

@@ -4,16 +4,11 @@
     tools:context="com.dinfogarneau.cours03e.ecotrajet.ConducteurActivity">
 
     <item
-        android:id="@+id/idAjoutDepart"
-        android:title="@string/TextAjoutDepart"
+        android:id="@+id/idDeconnetion"
+        android:title="@string/TextDeconnetion"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item
-    android:id="@+id/idDeconnetion"
-    android:title="@string/TextDeconnetion"
-    android:orderInCategory="100"
-    app:showAsAction="never" />
-
-    <item android:id="@+id/aide_Conducteur" android:title="@string/AideConducteurMenu"
+    <item android:id="@+id/aide_Recherche" android:title="@string/AideRechercheMenu"
         android:orderInCategory="100" app:showAsAction="never" />
+
 </menu>

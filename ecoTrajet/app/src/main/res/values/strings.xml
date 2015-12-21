@@ -27,6 +27,7 @@
     <string name="pswConfirmeInscriptionText"> confirmation de mot de passe : </string>
     <string name="hintPswConfirmeInscriptionText"> entrer à nouveau votre mot de passe</string>
     <string name="nomTypePasager"> Conducteur ou passager :</string>
+    <string name="comm_error">Erreur de communication</string>
 
 
     <!--Text ce rapportant à la page de choix  -->
@@ -47,6 +48,7 @@
     <!-- texte se rapportant au nom des fragment  d'un conducteur -->
     <string name="textFragmentDepart">Départ</string>
     <string name="textFragmentDemande">Demande</string>
+    <string name="textAccptDemande">Accepter la demande</string>
 
     <!-- id se rapportant à la page d\'ajout de trajet -->
     <string name="TextDateDepart">Date du trajet : </string>
@@ -57,6 +59,8 @@
     <string name="hintNomParcours"> parcours Québec -Montréal  </string>
     <string name="hintCoutPersonne"> 15  </string>
     <string name="textSpinnerRegion">région Administrative ?  </string>
+    <string name="lblNomDemandes">lblNomDemandes </string>
+    <string name="lblNomUtilP">lblNomUtilP</string>
 
     <!-- Page recherche -->
     <string name="lblPageRecherche">Rechercher un trajet</string>
@@ -66,11 +70,11 @@
     <string name="lblRechercheDateB">Et :</string>
     <string name="btnChoisirDate">Sélectionnez une date</string>
     <string name="lblBtnRechercher">Rechercher</string>
-    <string name="title_rechercheActivity">RechercheActivity</string>
+    <string name="title_rechercheActivity">Rechercher un trajet</string>
 
     <!-- Page resultat recherche -->
     <string name="lblResultatRechercheTitre">Resultat de la recherche</string>
-    <string name="title_resultatRechercheActivity">ResultatRechercheActivity</string>
+    <string name="title_resultatRechercheActivity">Resultat de la Recherche.</string>
 
     <!--Page description -->
     <string name="lblTitreDescParcours">Parcours 1</string>
@@ -83,12 +87,11 @@
     <string name="lblContributionDescParcours">Contribution demandé par passager :</string>
     <string name="ContributionDescParcours">20$</string>
     <string name="btnDemanderDescParcours">Demander au conducteur</string>
-    <string name="title_DescriptionParcoursActivity">DescriptionParcoursActivity</string>
+    <string name="title_DescriptionParcoursActivity">Description d\'un parcour</string>
 
 
 
     <!--Page Modification d'un parcours -->
-    <string name="text_Title_activity">modification du parcours : Parcours 1</string>
     <string name="text_modif_nbPassager">4</string>
     <string name="text_modif_heure">15 h 00</string>
 
@@ -194,15 +197,15 @@
     <string name="idDeconnetion">ChoseActivity</string>
     <string name="TextAjoutDepart">Ajout de Parcour</string>
     <string name="TextVoirCarte">Voir la carte</string>
-    <string name="TextDeconnetion">Déconnection</string>
+    <string name="TextDeconnetion">Déconnexion</string>
 
     <!-- Ajout_parcour -->
     <string name="idAjoutTrajetM">idAjoutTrajetM</string>
 
-    <string name="title_activity_passager">PassagerActivity</string>
-    <string name="title_activity_conducteur">ConducteurActivity</string>
+    <string name="title_activity_passager">Passager</string>
+    <string name="title_activity_conducteur">Conducteur</string>
     <string name="title_activity_map_activity">Map</string>
-    <string name="title_activity_ajout_trajet">ajout_trajet</string>
+    <string name="title_activity_ajout_trajet">ajouter un Trajet</string>
 
     <!--menu contextuelle pour le fragment depart-->
     <!-- texte, id -->
@@ -220,7 +223,7 @@
     <string name="lblNomUtil">Guillaume Simard</string>
     <string name="lblParcoursEmprunte">Liste des parcours emprunté :</string>
     <string name="historique_menu_text">Rechercher</string>
-    <string name="title_historiqueActivity">HistoriqueActivity</string>
+    <string name="title_historiqueActivity">Historique du passagé.</string>
 
 
 
@@ -230,5 +233,47 @@
 
 
     <string name="google_maps_key"> </string>
-    <string name="title_activity_modif_pracour">modifPracourActivity</string>
+    <string name="title_activity_modif_pracour">Modification d\'un parcour</string>
+    <string name="textKm">nom de kilomètre de ce trajet est de :</string>
+    <string name="titrePopoKilo">Distance du parcours</string>
+    <string name="titreErreurConnection">Connexion réseau manquante</string>
+    <string name="btextErreurConnexion">Aucune connexion internet. Une connexion est nécéssaire afin de se connecter.</string>
+    <string name="statusBarNotif">demande de Parcours</string>
+    <string name="titleNotif">demande de parcours</string>
+    <string name="msg_alarm_receiver">message reçus</string>
+    <string name="title_activity_aide_connexion">AideConnexionActivity</string>
+
+    <!--Valeurs pour les fichiers d'aide -->
+    <string name ="nomParcourAjoutAide">Nom du parcours que vous voulez ajouter</string>
+    <string name ="ConducteurActivityAide">Cette liste montre vos parcours dans la première page et vos demandes reçus dans la secone. Cliquez sur un des parcours pour en voir le détail. Si vous voulez ajouter un parcour, sélectionnez Ajout de parcour dans le menu. Si vous voulez modifier ou supprimer un parcours, tennez votre doigt enfoncé sur un parcours. Pour accepter ou refuser une demande, tenez votre doight enfocé sur sur une demande et choissisez l\'option désirée</string>
+    <string name ="DescriptionParcoursAide">Cette page montre les détails d\'un parcours. Pour envoyer une demande au conducteur, appuyez sur le bouton Demander au conducteur</string>
+    <string name ="HistoriqueParcoursAide">Cette page montre l\'historique de vos parcours. Cliquez sur un des éléments pour en voir le détail.</string>
+    <string name ="InscriptionAide">Ceci est la page d\'inscription. Pour vous inscrire, saisissez les champs demandés et appuyez sur le crochet sur votre barre de menu pour confirmer.</string>
+    <string name ="ModificationParcoursAide">Ceci est la page de modification d\'un trajet, entrez les informations à modifier. Si le trajet est à modifier, vous pouvez cliquer sur le bouton sous la map pour réinitialiser les points de départ et d\'arrivée.</string>
+    <string name ="RechercheParcourAide">Ceci est la page servant à entrer les critère pour rechercher un parcours. Entrez les informations connues dans les champs indiqué et appuyez sur le boutton Rechercher pour lancer la recherche.</string>
+    <string name ="ResultatRechercheParcourAide">Ceci est la page qui affiche les résultats de votre recherche. Appuyez sur un des résultats pour en voir le détail.</string>
+    <string name="TrajetAjoutAide">Aide ajout d\'un trajet</string>
+    <string name="AideAjoutTrajet">Voici la page d\'ajout d\'un trajet. Vous pouvez sélectionner un trajet sur la carte en cliquant au point de départ, ensuite au point d\'arrivé. Entrez le reste des informations demandées puis confirmez l\'ajout en passant par votre menu.</string>
+    <string name="AideConnexion">Aide connexion</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="AideConnexionDetails">Si vous avez un compte, entrez les informations et appuyez sur Connexion, sinon vous pouvez vous inscrire en appuyant sur Inscription</string>
+    <string name="title_activity_inscription_aide">Insrciption</string>
+    <string name="AideInscriptionMenu">Aide Inscription</string>
+    <string name="AideAjoutTrajetMenu">Aide ajout</string>
+    <string name="AideConducteurMenu">Aide Conducteur</string>
+    <string name="title_activity_description_parcours_activity_aide">
+        DescriptionParcoursActivityAide
+    </string>
+    <string name="AideHistoriqueMenu">Aide Historique</string>
+    <string name="AideModifParcoursMenu">Aide Modification</string>
+    <string name="AideDescriptionParcourMenu">Aide Description Parcour</string>
+    <string name="AideRechercheMenu">Aide Recherche</string>
+    <string name="text_Modif_Parcour">Modiification du parcours</string>
+    <string name="TitreErreur">Erreur lors de l\'inscription</string>
+    <string name="TextErreurConnexion">Tous les champs doivent être complétés afin de vous inscrire</string>
+    <string name="AideResultat_Title">Aide_resultats_recherche</string>
+    <string name="AideResultat">Aide sur le résultat de la recherche.</string>
+    <string name="AideResultatRecherche">Vous trouverez ici, la liste des parcours correspondant à votre recherche. Afin de visualiser les détails d\'un parcours, vous devez apuyer sur un parcours de la liste.</string>
 </resources>

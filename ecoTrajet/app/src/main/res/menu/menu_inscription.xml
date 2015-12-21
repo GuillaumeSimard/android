@@ -1,5 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.dinfogarneau.cours03e.ecotrajet.InscriptionActivity">
 
     <item
@@ -8,4 +9,8 @@
         android:icon="@mipmap/ic_action_accept"
         android:orderInCategory="100"
         android:showAsAction="always" />
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/aide_Inscription" android:title="@string/AideInscriptionMenu"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

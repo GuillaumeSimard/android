@@ -4,10 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-
+import android.content.SharedPreferences;
 import android.location.Location;
-import android.support.v4.app.FragmentActivity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,16 +22,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcourPassagerDataSource;
 import com.dinfogarneau.cours03e.ecotrajet.DataSource.ParcoursDataSource;
 import com.dinfogarneau.cours03e.ecotrajet.data.Parcours;
 import com.dinfogarneau.cours03e.ecotrajet.data.ParcoursUtil;
 import com.dinfogarneau.cours03e.ecotrajet.data.Utilisateur;
+import com.dinfogarneau.cours03e.ecotrajet.unit.JSonParser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -36,9 +40,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+
+import java.net.URI;
 import java.util.ArrayList;
 
-import static com.google.android.gms.common.api.GoogleApiClient.*;
+import static com.google.android.gms.common.api.GoogleApiClient.Builder;
+import static com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import static com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
 
 public class ajout_trajet extends FragmentActivity implements
@@ -55,12 +69,12 @@ public class ajout_trajet extends FragmentActivity implements
     private Parcours parcoursAdd;
     private Spinner spinerRegion;
     private ParcoursDataSource parcoursDb;
-    private ParcourPassagerDataSource parcoursPassagerDb;
     private Utilisateur utilisateurRecup;
     private double lattitueDepart = 0;
     private double longitudeDepart = 0;
     private double lattitueArrive = 0;
     private double longitudeArrive = 0;
+    AlertDialog  dialogAide;
 
     EditText editNom;
     EditText nbPlace;
@@ -74,12 +88,16 @@ public class ajout_trajet extends FragmentActivity implements
 
     public static final String UTILISATEURCONNECTE = "Utilisateur connecté";
 
+    ConnectivityManager connManager;
+    NetworkInfo mWifi;
+    NetworkInfo m3G;
+    private Dialog dialogErreur;
+
     Marker markerDebut;
     Marker markerFin;
 
     // Dernière position obtenue.
     private Location mLastLocation = null;
-    private final String TAG = getClass().getSimpleName();
 
     // Coordonnées initiales : Haute-ville de Québec.
     private final static LatLng QUEBEC_HAUTE_VILLE = new LatLng(46.813395, -71.215954);
@@ -94,6 +112,12 @@ public class ajout_trajet extends FragmentActivity implements
     //variable de gestion du calendrier
     CalendarView calendar;
 
+    //variable composant l''url du services web afin d'ajouter un parcours
+    private final static String WEB_SERVICE_URL = "ecotrajet-1065.appspot.com";
+    private final static String REST_UTILISATEURS = "/utilisateurs";
+    private final static String REST_PARCOURS = "/Parcours";
+    private final String TAG = this.getClass().getSimpleName();
+    private HttpClient m_ClientHttp = new DefaultHttpClient();
 
 
 
@@ -109,10 +133,11 @@ public class ajout_trajet extends FragmentActivity implements
         cout = (EditText) findViewById(R.id.idCoutPersonne);
         heure = (EditText) findViewById(R.id.idHeureDepart);
 
-
+        connManager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        m3G = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
         parcoursDb = new ParcoursDataSource(this);
-        parcoursPassagerDb = new ParcourPassagerDataSource((this));
 
         setUpMapIfNeeded();
         buildGoogleApiClient();
@@ -165,6 +190,10 @@ public class ajout_trajet extends FragmentActivity implements
         });
     }
 
+    /**
+     * Méthode appelé lorsque l'on tourne l'écran afin de conserver les donnée.
+     * @param p_OutState
+     */
     @Override
     protected void onSaveInstanceState(Bundle p_OutState) {
         super.onSaveInstanceState(p_OutState);
@@ -185,6 +214,12 @@ public class ajout_trajet extends FragmentActivity implements
         Log.i(TAG, "onSaveInstanceState()");
     }
 
+
+    /**
+     * Méthode appelé losrque l'appareil a été tournée et afin de récupérer les éléments sauvegardé
+     * dans le onSaveInstanceState
+     * @param p_SavedInstanceState
+     */
     @Override
     protected void onRestoreInstanceState(Bundle p_SavedInstanceState) {
         super.onRestoreInstanceState(p_SavedInstanceState);
@@ -231,6 +266,11 @@ public class ajout_trajet extends FragmentActivity implements
         Log.i(TAG, "onRestoreInstanceState()");
     }
 
+    /**
+     * Méthode  qui a pour but de créer le menu de l'activité.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -238,6 +278,11 @@ public class ajout_trajet extends FragmentActivity implements
         return true;
     }
 
+    /**
+     * Méthode appeler lorsque l'on appuit sur un élément du menu.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -245,11 +290,42 @@ public class ajout_trajet extends FragmentActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.idAjoutTrajetM) {
-            afficherPopop();
-            return true;
+        switch(id)
+        {
+            case R.id.idAjoutTrajetM:
+                afficherPopop();
+                break;
+
+            case R.id.idDeconnetion:
+                deconnection();
+                Intent iD = new Intent(this, MainActivity.class);
+                this.startActivity(iD);
+                break;
+
+            case R.id.aide_AjoutTrajet:
+
+                if(dialogAide== null) {
+                    dialogAide = new AlertDialog.Builder(this)
+                            .setTitle(R.string.AideInscriptionMenu)
+                            .setMessage(R.string.AideAjoutTrajet)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                                //méthode permettant la suppression
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .create();
+                    dialogAide.setOwnerActivity(this);
+                    dialogAide.show();
+                }
+                else{
+                    dialogAide.show();
+                }
+                break;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -283,7 +359,9 @@ public class ajout_trajet extends FragmentActivity implements
         }
     }
 
-
+    /**
+     * Méthode utiliser pour mettre à jours ma position lorsque je me déplace.
+     */
     private void UpdateParcoursMap() {
 
                 //initialisation des markers
@@ -330,6 +408,9 @@ public class ajout_trajet extends FragmentActivity implements
         mLocationRequest.setInterval(10 * 1000);
     }
 
+    /********************************************************************************************
+     * Gestion des cycles.
+     *******************************************************************************************/
     @Override
     protected void onStart() {
         super.onStart();
@@ -345,6 +426,29 @@ public class ajout_trajet extends FragmentActivity implements
     }
 
     /**
+     * Méthode appelé lors de la reconstruction de l'activité
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpMapIfNeeded();
+        if (mGoogleApiClient.isConnected()) {
+            this.startLocationUpdates();
+        }
+    }
+
+    /**
+     * Méthode effectuer lorsque l'application et /ou l'activité est mis en pause.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            this.stopLocationUpdates();
+        }
+    }
+
+    /**
      * Mise à jour de l'interface lorsqu'une nouvelle localisation est obtenue.
      */
     private void majPosition() {
@@ -355,31 +459,19 @@ public class ajout_trajet extends FragmentActivity implements
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())));
                 positionDetecte = true;
             }
-            // Affichage de l'information sur la position obtenue à l'écran.
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-        if (mGoogleApiClient.isConnected()) {
-            this.startLocationUpdates();
-        }
-    }
-
+    /**
+     * Méthode permettant de débuter la géolocalisation.
+     */
     protected void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mGoogleApiClient.isConnected()) {
-            this.stopLocationUpdates();
-        }
-    }
-
+    /**
+     *Méthode
+     */
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
@@ -429,7 +521,8 @@ public class ajout_trajet extends FragmentActivity implements
 
     }
 
-    /*méthode permettant de générer le popop de confirmation*/
+    /**
+     * *méthode permettant de générer le popop de confirmation*/
     private void afficherPopop() {
 
         if(dialogConfirmation== null) {
@@ -442,10 +535,10 @@ public class ajout_trajet extends FragmentActivity implements
                         //méthode permettant l'ajout
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            int iNombre;
-                            if(parcoursAdd != null) {
-                                iNombre =  parcoursDb.LstId();
 
+                            if(parcoursAdd != null) {
+
+                                //set de valeur pour un parcours
                                 parcoursAdd.setM_nomParcour(editNom.getText().toString());
                                 parcoursAdd.setM_idRegion(spinerRegion.getSelectedItemPosition() + 1);
                                 parcoursAdd.setM_dateParcours(Date);
@@ -460,24 +553,27 @@ public class ajout_trajet extends FragmentActivity implements
                                 if(!cout.getText().toString().equals("")) {
                                     parcoursAdd.setM_coutPersonne(Integer.parseInt(cout.getText().toString()));
                                 }
-                                parcoursAdd.setM_idParcour(iNombre + 1);
                                 parcoursAdd.setM_nomConducteure(utilisateurRecup.getM_nomUtilisateur());
 
                                     if(Date != null)
                                     {
-
                                         if(!editNom.getText().toString().equals("") && !nbPlace.getText().toString().equals("")
                                             && !cout.getText().toString().equals("") && !heure.getText().toString().equals("")) {
 
-                                            parcoursUtilAdd = new ParcoursUtil(parcoursAdd.getM_idParcour(), utilisateurRecup.getM_nomUtilisateur());
                                             parcoursDb.insert(parcoursAdd);
-                                            parcoursPassagerDb.open();
-                                            parcoursPassagerDb.insert((parcoursUtilAdd));
-                                            parcoursPassagerDb.close();
 
-                                            Intent i = new Intent(getApplicationContext(),ConducteurActivity.class);
-                                            i.putExtra(UTILISATEURCONNECTE, utilisateurRecup);
-                                            startActivity(i);
+                                            //vérifie qu'ily a bien une connexion reseau.
+                                            if((mWifi != null && mWifi.isConnected()) || (m3G != null && m3G.isConnected())) {
+                                                new AddNewParcoursTask().execute((Void) null);
+
+                                                Intent i = new Intent(getApplicationContext(), ConducteurActivity.class);
+                                                i.putExtra(UTILISATEURCONNECTE, utilisateurRecup);
+                                                startActivity(i);
+                                            }
+                                            else
+                                            {
+                                                afficherMessage();
+                                            }
                                         }
                                         else{
                                             Toast.makeText(getApplicationContext(), "Tous les champs doivent être remplis pour pouvoir ajouter", Toast.LENGTH_SHORT).show();
@@ -504,7 +600,9 @@ public class ajout_trajet extends FragmentActivity implements
         }
     }
 
-    //méthode permettant d'initialiser le calendrier
+    /**
+     * méthode permettant d'initialiser le calendrier
+     */
     public void initializeCalendar() {
 
         //initialisation du calendrier
@@ -528,7 +626,94 @@ public class ajout_trajet extends FragmentActivity implements
             }
 
         });
-
     }
 
+
+    /**********************************************************************************************
+     * Sous classe Asynchrone permettant l'ajout d'un parcours au services web
+     **********************************************************************************************/
+    private class AddNewParcoursTask extends AsyncTask<Void, Void, Void> {
+        Exception m_Exp;
+
+        @Override
+        protected void onPreExecute() {
+            setProgressBarIndeterminateVisibility(true);
+        }
+
+        @Override
+        protected Void doInBackground(Void ... unused) {
+            try {
+
+                URI uri = new URI("http", WEB_SERVICE_URL, REST_UTILISATEURS + "/" + utilisateurRecup.getM_nomUtilisateur() + REST_PARCOURS , null, null);
+                HttpPost postMethod = new HttpPost(uri);
+
+                JSONObject obj = JSonParser.serialiserJsonParcours(parcoursAdd);
+                postMethod.setEntity(new StringEntity(obj.toString()));
+                postMethod.addHeader("Content-Type", "application/json");
+
+                m_ClientHttp.execute(postMethod, new BasicResponseHandler());
+                Log.i(TAG, "Put terminé");
+
+            } catch (Exception e) {
+                m_Exp = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            setProgressBarIndeterminateVisibility(false);
+
+            if (m_Exp == null) {
+            } else {
+
+                parcoursAdd.setM_idParcour(Integer.parseInt(parcoursAdd.getM_idServiceWeb()));
+                parcoursDb.open();
+
+                //ajout d'un nouveau parcours à la bd.
+                Parcours unParrcour = new Parcours(parcoursAdd.getM_idServiceWeb(),parcoursAdd.getM_nomParcour(),
+                                                    parcoursAdd.getM_nbPlaceDisponible(),parcoursAdd.getM_nbPlacePrise(),parcoursAdd.getM_dateParcours(),
+                                                    parcoursAdd.getM_Heure(), parcoursAdd.getM_coutPersonne(),parcoursAdd.getM_idRegion(), parcoursAdd.getM_coordonneDeparts(),
+                                                    parcoursAdd.getM_coordonneArrive(), parcoursAdd.getM_nomConducteure());
+                parcoursDb.insert(unParrcour);
+                Log.e(TAG, "Error while posting", m_Exp);
+                Toast.makeText(ajout_trajet.this, getString(R.string.comm_error), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * Méthode permettant de gerer la déconnexion d'un utilisateur.
+     */
+    public void deconnection(){
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString("nomUtilisateur","");
+        editor.putString("motPasse", "");
+        editor.commit();
+    }
+
+    /**
+     * méthode permmettant d'afficher un lors d'une erreur de connexion reseaux
+     */
+    private void afficherMessage() {
+
+        if(dialogConfirmation== null) {
+            dialogConfirmation = new AlertDialog.Builder(this)
+                    .setTitle(R.string.titreErreurConnection)
+                    .setMessage(R.string.btextErreurConnexion)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                        //méthode permettant la suppression
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create();
+            dialogConfirmation.show();
+        }
+        else{
+            dialogConfirmation.show();
+        }
+    }
 }
